@@ -1,4 +1,3 @@
-//const BOT_TOKEN = "REPLACR_TO_YOUR_BOT_TOKEN";
 
 function doPost(e) {
     const contents = JSON.parse(e.postData.contents);
