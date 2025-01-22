@@ -6,6 +6,34 @@ class TelegramBotClient {
     this.telegramEnpBaseUrl = "https://api.telegram.org/bot" + botToken;
   }
 
+  /**
+   * Post sendMessage to the API endpoint
+   * 
+   * @param requestOptions The sendMessage paramters, see: https://core.telegram.org/bots/api#sendmessage 
+   */
+  sendMessage(payload = {
+    method: "sendMessage",
+    chat_id: '',
+    message_thread_id: null,
+    text: '..🫢🫢..',
+    parse_mode: "HTML",
+    entities: null,
+    disable_web_page_preview: true,
+    disable_notification: true,
+    protect_content: false,
+    reply_to_message_id: null,
+    allow_sending_without_reply: true,
+    reply_markup: {}
+  }) {
+    var data = {
+      method: "post",
+      payload: payload
+    };
+
+    var url = this.getApiBaseUrl() + "/sendMessage";
+    return UrlFetchApp.fetch(url, data);
+  }
+
   //forwardMessage
   forwardMessage(requestOptions = {}) {
     var data = {
@@ -375,33 +403,6 @@ class TelegramBotClient {
     return UrlFetchApp.fetch(url, data);
   }
 
-  /**
-   * Post sendMessage to the API endpoint
-   * 
-   * @param {object} requestOptions The sendMessage paramters, see: https://core.telegram.org/bots/api#sendmessage 
-   */
-  sendMessage(requestOptions) {
-    var data = {
-      method: "post",
-      payload: {
-        method: "sendMessage",
-        chat_id: String(requestOptions.chat_id),
-        message_thread_id: requestOptions.message_thread_id || null,
-        text: requestOptions.text || "...",
-        parse_mode: requestOptions.parse_mode || "HTML",
-        entities: requestOptions.entities || null,
-        disable_web_page_preview: requestOptions.disable_web_page_preview || true,
-        disable_notification: requestOptions.disable_notification || true,
-        protect_content: requestOptions.protect_content || false,
-        reply_to_message_id: requestOptions.reply_to_message_id || null,
-        allow_sending_without_reply: requestOptions.allow_sending_without_reply || true,
-        reply_markup: requestOptions.reply_markup || {}
-      }
-    };
-
-    var url = this.getApiBaseUrl() + "/sendMessage";
-    return UrlFetchApp.fetch(url, data);
-  }
 
   /**
    * Post editMessageText to the API endpoint
@@ -485,52 +486,6 @@ class TelegramBotClient {
   getBusinessConnection(business_connection_id) {
     var url = `${this.getApiBaseUrl()}/getBusinessConnection?business_connection_id=${business_connection_id}`;
     return UrlFetchApp.fetch(url);
-  }
-
-  sendMessageWithEntities(chat_id, text, entities, disable_notification = true) {
-    var data = {
-      method: "post",
-      payload: {
-        method: "sendMessage",
-        parse_mode: "html",
-        chat_id: String(chat_id),
-        text: text,
-        entities: entities,
-        disable_notification: disable_notification
-      }
-    };
-    var url = this.getApiBaseUrl() + "/sendMessage?chat_id=" + chat_id;
-    return UrlFetchApp.fetch(url, data);
-  }
-  sendMessageHtml(chat_id, html) {
-    var data = {
-      method: "post",
-      payload: {
-        method: "sendMessage",
-        chat_id: String(chat_id),
-        text: html,
-        parse_mode: "HTML"
-      }
-    };
-    var url = this.getApiBaseUrl() + "/sendMessage?chat_id=" + chat_id;
-    return UrlFetchApp.fetch(url, data);
-  }
-
-  sendMessageWithKeyboard(chat_id, text, reply_markup, reply_to_message_id, disable_notification = true) {
-    var data = {
-      method: "post",
-      payload: {
-        method: "sendMessage",
-        chat_id: String(chat_id),
-        text: text,
-        parse_mode: "HTML",
-        reply_markup: JSON.stringify(reply_markup),
-        reply_to_message_id: reply_to_message_id,
-        disable_notification: disable_notification,
-      }
-    };
-    var url = this.getApiBaseUrl() + "/sendMessage?chat_id=" + chat_id;
-    return UrlFetchApp.fetch(url, data);
   }
 
   sendChatAction(chat_id, action) {

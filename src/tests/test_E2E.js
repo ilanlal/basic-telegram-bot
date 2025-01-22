@@ -1,3 +1,15 @@
+function test_e2e_run() {
+    // Imports the following functions:
+    // ok, equal, notEqual, deepEqual, notDeepEqual, strictEqual,
+    // notStrictEqual, throws, module, test, asyncTest, expect
+    QUnit.helpers(this);
+
+    module("e2e module");
+
+    test("test getResource", 1, function () {
+        ok(true);
+    });
+}
 class Test_E2E {
     constructor({ botToken, chat_id }) {
         this.botClient = new TelegramBotClient(botToken);

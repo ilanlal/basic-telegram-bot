@@ -1,4 +1,3 @@
-
 function doPost(e) {
     const contents = JSON.parse(e.postData.contents);
 
@@ -14,28 +13,32 @@ function doPost(e) {
 function handelBotCommand(message) {
     const chat_id = message.from.id;
     const command = message.text;
-    const language_code = message.from.language_code;
-    const resources = language_code === 'es' ? Resources.es : Resources.en;
-    
+    const resource = getResource(message.from.language_code);
+
     // initilize bot client
     const scriptProperties = PropertiesService.getScriptProperties();
     const botToken = scriptProperties.getProperty('BOT_TOKEN');
     const botClient = new TelegramBotClient(botToken);
 
     if (command === "/start") {
-        const reply_markup = buildInlineKeyboard(resources);
-
+        const reply_markup = {
+            inline_keyboard: resource?.start?.reply_markup || {}
+        }
         return botClient.sendMessage({
             chat_id: chat_id,
-            text: resources.hello,
-            reply_markup: reply_markup
+            text: resource?.start?.text || '..🫢..🫢',
+            reply_markup: JSON.stringify(reply_markup)
         });
     }
 
     if (command === "/help") {
+        const reply_markup = {
+            inline_keyboard: resource?.help?.reply_markup || {}
+        }
         return botClient.sendMessage({
             chat_id: chat_id,
-            text: resources.help
+            text: resource?.help?.text || '..🫢..🫢',
+            reply_markup: JSON.stringify(reply_markup)
         });
     }
 }
@@ -43,16 +46,26 @@ function handelBotCommand(message) {
 function handleCallbackQuery(callback_query) {
     const chat_id = callback_query.from.id;
     const language_code = callback_query.from.language_code;
-    const resources = language_code === 'es' ? Resources.es : Resources.en;
+    const resource = getResource(language_code);
     const data_text = callback_query.data;
     const scriptProperties = PropertiesService.getScriptProperties();
     const botToken = scriptProperties.getProperty('BOT_TOKEN');
     const botClient = new TelegramBotClient(botToken);
 
+    this.botClient.answerCallbackQuery({
+        callback_query_id: callback_query.id,
+        text: resource.thanks.text,
+        cache_time: 10
+    });
+
     if (data_text === 'like') {
+        const reply_markup = {
+            inline_keyboard: resource?.help?.reply_markup || {}
+        }
         return botClient.sendMessage({
             chat_id: chat_id,
-            text: resources.thanks
+            text: resource.thanks.text,
+            reply_markup: JSON.stringify(reply_markup)
         });
     }
 
@@ -62,20 +75,4 @@ function handleCallbackQuery(callback_query) {
             text: `${chat_id} ${language_code}`
         });
     }
-}
-
-function buildInlineKeyboard(resources) {
-    const keyboard = [[
-        { text: "YouTube™️", web_app: { url: "https://www.youtube.com" } }
-    ], [
-        { text: `${resources.whoami}`, callback_data: "whoami" }
-    ], [
-        { text: `${resources.like}`, callback_data: "like" }
-    ]];
-
-    const reply_markup = {
-        inline_keyboard: keyboard
-    };
-
-    return JSON.stringify(reply_markup);
 }
