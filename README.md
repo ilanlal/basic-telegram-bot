@@ -37,6 +37,8 @@ Easy baasbasic bot [@EasyBasic_bot]()
 ### Push & Deploy
 `clasp push -w`
 
+`clasp deploy -d "0.0.1-beta" -i "AKfycbzscwb13UwgXl9NZxeEg99uX5zVh20orRRJx4tDq-AaGoo1cjYYNNTioKnhItkuPsvN"`
+
 ### Contributing
 
 The main purpose of this tool is to enable local Apps Script development. If you have a core feature or use-case you'd like to see, find a GitHub issue or create a detailed proposal of the use-case. PRs are very welcome! 
