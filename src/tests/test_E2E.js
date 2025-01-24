@@ -1,53 +1,21 @@
-function test_e2e_run() {
-    // Imports the following functions:
-    // ok, equal, notEqual, deepEqual, notDeepEqual, strictEqual,
-    // notStrictEqual, throws, module, test, asyncTest, expect
-    QUnit.helpers(this);
-
-    module("e2e module");
-
-    test("test getResource", 1, function () {
-        ok(true);
-    });
-}
 class Test_E2E {
-    constructor({ botToken, chat_id }) {
-        this.botClient = new TelegramBotClient(botToken);
-        this.chat_id = parseInt(chat_id);
+    constructor() {
+        // Imports the following functions:
+        // ok, equal, notEqual, deepEqual, notDeepEqual, strictEqual,
+        // notStrictEqual, throws, module, test, asyncTest, expect
+        QUnit.helpers(this);
+
+        const scriptProperties = PropertiesService.getScriptProperties();
+        this.botToken = scriptProperties.getProperty('BOT_TOKEN');
+        this.chat_id = scriptProperties.getProperty('ADMIN_CHAT_ID');
+        this.botClient = new TelegramBotClient(this.botToken);
+
+        this.module("TelegramBotClient E2E Apps Script module");
+        this.runTests();
     }
-
-    test_setWebhook(webhookUrl) {
-        Logger.log("test_setWebhook");
-        const res = this.botClient.setWebhook(webhookUrl);
-        Logger.log(webhookUrl);
-        return true;
-    }
-
-    test_sendMessage() {
-        Logger.log("test_sendMessage");
-        const html = '<blockquote>Hi.. this is test</blockquote>';
-        const keyboard = [[
-            { text: "Open YouTube™️", web_app: { url: "https://www.youtube.com" } }
-        ], [
-            { callback_data: "🎳", text: "🎳" },
-            { callback_data: "🏀", text: "🏀" }
-        ], [
-            { callback_data: "🎰", text: "🎰" },
-            { callback_data: "🎲", text: "🎲" }
-        ]];
-
-        const reply_markup = {
-            inline_keyboard: keyboard
-        }
-
-
-        const res = this.botClient.sendMessage({
-            chat_id: this.chat_id,
-            text: html,
-            reply_markup: JSON.stringify(reply_markup)
-        });
-
-        Logger.log(res);
+    
+    runTests() {
+        //this.test_setWebhook();
     }
 }
 
