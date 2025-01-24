@@ -11,19 +11,17 @@ class Test_TelegramBotClient {
     runTests() {
         let that = this;
         this.test("test sendMessage", function (assert) {
-            const messageId = that.test_sendMessage();
-            that.test_deleteMessage(messageId);
+            that.test_sendMessage(assert);
             assert.ok(true, "sendMessage test");
         });
 
         this.test("test sendPhoto", function (assert) {
-            const messageId = that.test_sendPhoto();
-            that.test_deleteMessage(messageId);
+            that.test_sendPhoto(assert);
             assert.ok(true, "sendPhoto test");
         });
     }
 
-    test_sendMessage() {
+    test_sendMessage(assert) {
         const scriptProperties = PropertiesService.getScriptProperties();
         const token = scriptProperties.getProperty('BOT_TOKEN');
         const chat_id = scriptProperties.getProperty('ADMIN_CHAT_ID');
@@ -37,7 +35,7 @@ class Test_TelegramBotClient {
         return result.message_id;
     }
 
-    test_sendPhoto() {
+    test_sendPhoto(assert) {
         const scriptProperties = PropertiesService.getScriptProperties();
         const token = scriptProperties.getProperty('BOT_TOKEN');
         const chat_id = scriptProperties.getProperty('ADMIN_CHAT_ID');
@@ -52,7 +50,7 @@ class Test_TelegramBotClient {
         return result.message_id;
     }
 
-    test_deleteMessage(messageId) {
+    test_deleteMessage(assert) {
         const scriptProperties = PropertiesService.getScriptProperties();
         const token = scriptProperties.getProperty('BOT_TOKEN');
         const chat_id = scriptProperties.getProperty('ADMIN_CHAT_ID');
