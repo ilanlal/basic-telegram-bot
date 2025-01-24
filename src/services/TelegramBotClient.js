@@ -1,40 +1,183 @@
 /**
- * Open free code.
+ * @version 1.0.0
+ * @class TelegramBotClient
+ * @classdesc This class is used to interact with the Telegram Bot API.
+ * @example
+ * const botToken = [YOUR_BOT_TOKEN];
+ * const botClient = new TelegramBotClient(botToken);
+ * 
+ * botClient.sendMessage({
+ *  chat_id: chat_id,
+ *  text: "Hi.. this is test"
+ * });
+ * 
+ * @see https://github.com/ilanlal/basic-telegram-bot
  */
 class TelegramBotClient {
-  constructor(botToken = '') {
+  /**
+   * @param {string} botToken The bot token from the Telegram Bot API.
+   * @constructor
+   * @example
+   * const botToken = [YOUR_BOT_TOKEN];
+   * const botClient = new TelegramBotClient(botToken);
+   */
+  constructor(botToken = '[YOUR_BOT_TOKEN') {
     this.telegramEnpBaseUrl = "https://api.telegram.org/bot" + botToken;
   }
 
   /**
-   * Post sendMessage to the API endpoint
+   * Post sendMessgae to the API endpoint.
+   * @see https://core.telegram.org/bots/api#sendmessage
    * 
-   * @param requestOptions The sendMessage paramters, see: https://core.telegram.org/bots/api#sendmessage 
+   * @param {object} requestOptions The sendMessage paramters, see: https://core.telegram.org/bots/api#sendmessage
+   * @param {string} requestOptions.chat_id Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param {string} requestOptions.text Text of the message to be sent, 1-4096 characters after entities parsing
+   * @returns {object} The response from the API endpoint.
+   * 
+   * @example
+   * const botToken = [YOUR_BOT_TOKEN];
+   * const chatId = [YOUR_CHAT_ID];
+   * const botClient = new TelegramBotClient(botToken);
+   * 
+   * botClient.sendMessage({
+   *  chat_id: chatId,
+   *  text: "Hi.. this is test"
+   * });
    */
-  sendMessage(payload = {
-    method: "sendMessage",
-    chat_id: '',
-    message_thread_id: null,
-    text: '..🫢🫢..',
-    parse_mode: "HTML",
-    entities: null,
-    disable_web_page_preview: true,
-    disable_notification: true,
-    protect_content: false,
-    reply_to_message_id: null,
-    allow_sending_without_reply: true,
-    reply_markup: {}
-  }) {
-    var data = {
-      method: "post",
-      payload: payload
+  sendMessage(requestOptions) {
+    if (!requestOptions.chat_id) {
+      throw new Error("chat_id is required!");
+    }
+
+    if (!requestOptions.text) {
+      throw new Error("text is required!");
+    }
+    const options = {
+      'chat_id': String(requestOptions.chat_id) || null,
+      'message_thread_id': requestOptions.message_thread_id || null,
+      'text': requestOptions.text || ':-)...',
+      'parse_mode': requestOptions.parse_mode || "HTML",
+      'entities': requestOptions.entities || null,
+      'disable_web_page_preview': requestOptions.disable_web_page_preview || true,
+      'disable_notification': requestOptions.disable_notification || true,
+      'protect_content': requestOptions.protect_content || false,
+      'reply_to_message_id': requestOptions.reply_to_message_id || null,
+      'allow_sending_without_reply': requestOptions.allow_sending_without_reply || true,
+      'reply_markup': requestOptions.reply_markup || {}
     };
 
-    var url = this.getApiBaseUrl() + "/sendMessage";
+    const data = {
+      'method': 'post',
+      'contentType': 'application/json',
+      'payload': JSON.stringify(options)
+    };
+
+    const url = this.getApiBaseUrl() + "/sendMessage";
     return UrlFetchApp.fetch(url, data);
   }
 
-  //forwardMessage
+  /**
+   * Use this method to send photos. On success, the sent Message is returned.
+   * 
+   * https://core.telegram.org/bots/api#sendphoto
+   */
+
+  sendPhoto(requestOptions) {
+    var data = {
+      'chat_id': requestOptions.chat_id,
+      'photo': requestOptions.photo,
+      'caption': requestOptions.caption,
+      'parse_mode': requestOptions.parse_mode || "HTML",
+      'has_spoiler': requestOptions.has_spoiler || false,
+      'disable_notification': requestOptions.disable_notification || true,
+      'protect_content': requestOptions.protect_content || false,
+      'reply_to_message_id': requestOptions.reply_to_message_id || null,
+      'allow_sending_without_reply': requestOptions.allow_sending_without_reply || true,
+      'reply_markup': requestOptions.reply_markup || {}
+    };
+
+    var options = {
+      'method': 'post',
+      'contentType': 'application/json',
+      // Convert the JavaScript object to a JSON string.
+      'payload': JSON.stringify(data)
+    };
+
+    var url = this.getApiBaseUrl() + `/sendPhoto`;
+    return UrlFetchApp.fetch(url, options);
+  }
+
+  /**
+   * Post editMessageMedia to the API endpoint
+   * 
+   * @param {object} requestOptions The editMessageMedia paramters, see: https://core.telegram.org/bots/api#editMessageMedia 
+   */
+  editMessageMedia(requestOptions) {
+    var data = {
+      'chat_id': requestOptions.chat_id,
+      'media': requestOptions.media,
+      'message_id': requestOptions.message_id,
+      //'inline_message_id': requestOptions.inline_message_id || null,
+      'reply_markup': requestOptions.reply_markup || {}
+    };
+
+    var options = {
+      'method': 'post',
+      'contentType': 'application/json',
+      // Convert the JavaScript object to a JSON string.
+      'payload': JSON.stringify(data)
+    };
+
+    var url = this.getApiBaseUrl() + `/editMessageMedia`;
+    return UrlFetchApp.fetch(url, options);
+  }
+
+  /**
+   * Post sendMediaGroup to the API endpoint
+   * 
+   * @param {object} requestOptions The sendMediaGroup paramters, see: https://core.telegram.org/bots/api#sendmediagroup 
+   */
+  sendMediaGroup(requestOptions) {
+    var data = {
+      'chat_id': requestOptions.chat_id,
+      'media': requestOptions.media,
+      'reply_to_message_id': requestOptions.reply_to_message_id,
+      'disable_notification': requestOptions.disable_notification || true,
+      'allow_sending_without_reply': requestOptions.allow_sending_without_reply || true
+    };
+
+    var options = {
+      'method': 'post',
+      'contentType': 'application/json',
+      // Convert the JavaScript object to a JSON string.
+      'payload': JSON.stringify(data)
+    };
+
+    var url = this.getApiBaseUrl() + `/sendMediaGroup`;
+    return UrlFetchApp.fetch(url, options);
+  }
+
+  /**
+   * Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * https://core.telegram.org/bots/api#editmessagecaption
+   */
+  editMessageCaption(requestOptions) {
+    var data = {
+      method: "post",
+      payload: {
+        chat_id: requestOptions.chat_id,
+        message_id: requestOptions.message_id,
+        inline_message_id: requestOptions.inline_message_id || null,
+        caption: requestOptions.caption || ':-)...',
+        parse_mode: requestOptions.parse_mode || "HTML",
+        caption_entities: requestOptions.caption_entities || null,
+        reply_markup: requestOptions.reply_markup || {}
+      }
+    };
+    var url = this.getApiBaseUrl() + "/editMessageCaption";
+    return UrlFetchApp.fetch(url, data);
+  }
+
   forwardMessage(requestOptions = {}) {
     var data = {
       'chat_id': String(requestOptions.chat_id),
@@ -122,108 +265,93 @@ class TelegramBotClient {
       'payload': JSON.stringify(data)
     };
 
-    var url = this.getApiBaseUrl() + `/sendVideo`;
+    var url = this.getApiBaseUrl() + '/sendVideo';
     return UrlFetchApp.fetch(url, options);
   }
 
-  /**
-   * Use this method to send photos. On success, the sent Message is returned.
-   * 
-   * https://core.telegram.org/bots/api#sendphoto
-   */
-
-  sendPhoto(requestOptions) {
-    var data = {
-      'chat_id': requestOptions.chat_id,
-      'photo': requestOptions.photo,
-      'caption': requestOptions.caption,
-      'parse_mode': requestOptions.parse_mode || "HTML",
-      'has_spoiler': requestOptions.has_spoiler || false,
-      'disable_notification': requestOptions.disable_notification || true,
-      'protect_content': requestOptions.protect_content || false,
-      'reply_to_message_id': requestOptions.reply_to_message_id || null,
-      'allow_sending_without_reply': requestOptions.allow_sending_without_reply || true,
-      'reply_markup': requestOptions.reply_markup || {}
-    };
-
-    var options = {
-      'method': 'post',
-      'contentType': 'application/json',
-      // Convert the JavaScript object to a JSON string.
-      'payload': JSON.stringify(data)
-    };
-
-    var url = this.getApiBaseUrl() + `/sendPhoto`;
-    return UrlFetchApp.fetch(url, options);
-  }
-  /**
-   * Post editMessageMedia to the API endpoint
-   * 
-   * @param {object} requestOptions The editMessageMedia paramters, see: https://core.telegram.org/bots/api#editMessageMedia 
-   */
-  editMessageMedia(requestOptions) {
-    var data = {
-      'chat_id': requestOptions.chat_id,
-      'media': requestOptions.media,
-      'message_id': requestOptions.message_id,
-      //'inline_message_id': requestOptions.inline_message_id || null,
-      'reply_markup': requestOptions.reply_markup || {}
-    };
-
-    var options = {
-      'method': 'post',
-      'contentType': 'application/json',
-      // Convert the JavaScript object to a JSON string.
-      'payload': JSON.stringify(data)
-    };
-
-    var url = this.getApiBaseUrl() + `/editMessageMedia`;
-    return UrlFetchApp.fetch(url, options);
+  deleteMessage({ chat_id, message_id }) {
+    var url = `${this.getApiBaseUrl()}/deleteMessage?chat_id=${chat_id}&message_id=${message_id}`;
+    return UrlFetchApp.fetch(url);
   }
 
-  /**
-   * Post sendMediaGroup to the API endpoint
-   * 
-   * @param {object} requestOptions The sendMediaGroup paramters, see: https://core.telegram.org/bots/api#sendmediagroup 
-   */
-  sendMediaGroup(requestOptions) {
-    var data = {
-      'chat_id': requestOptions.chat_id,
-      'media': requestOptions.media,
-      'reply_to_message_id': requestOptions.reply_to_message_id,
-      'disable_notification': requestOptions.disable_notification || true,
-      'allow_sending_without_reply': requestOptions.allow_sending_without_reply || true
-    };
-
-    var options = {
-      'method': 'post',
-      'contentType': 'application/json',
-      // Convert the JavaScript object to a JSON string.
-      'payload': JSON.stringify(data)
-    };
-
-    var url = this.getApiBaseUrl() + `/sendMediaGroup`;
-    return UrlFetchApp.fetch(url, options);
-  }
-
-  /**
-   * Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
-   * https://core.telegram.org/bots/api#editmessagecaption
-   */
-  editMessageCaption(requestOptions) {
+  copyMessage(from_chat_id, to_chat_id, message_id) {
     var data = {
       method: "post",
       payload: {
-        chat_id: requestOptions.chat_id,
-        message_id: requestOptions.message_id,
+        method: "copyMessage",
+        chat_id: String(to_chat_id),
+        from_chat_id: String(from_chat_id),
+        message_id: String(message_id),
+      }
+    };
+    var url = this.getApiBaseUrl() + "/copyMessage";
+    return UrlFetchApp.fetch(url, data);
+  }
+
+  /**
+   * Use this method to send answers to callback queries sent from inline keyboards. 
+   * The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. 
+   * On success, True is returned.
+   * https://core.telegram.org/bots/api#answercallbackquery
+   */
+  answerCallbackQuery(requestOptions) {
+    var data = {
+      method: "post",
+      payload: {
+        // Unique identifier for the query to be answered
+        callback_query_id: String(requestOptions.callback_query_id),
+        //The maximum amount of time in seconds that the result of the callback query may be cached client-side.
+        cache_time: requestOptions.cache_time || 0,
+        //Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
+        text: requestOptions.text || null,
+        //If True, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.
+        show_alert: requestOptions.show_alert || false,
+        //URL that will be opened by the user's client.
+        url: requestOptions.url || null
+      }
+    };
+    var url = this.getApiBaseUrl() + "/answerCallbackQuery";//?chat_id=" + chat_id;
+    return UrlFetchApp.fetch(url, data);
+  }
+
+  /**
+   * Post editMessageText to the API endpoint
+   * 
+   * @param {object} requestOptions The editMessageText paramters, see: https://core.telegram.org/bots/api#editmessagetext 
+   */
+  editMessageText(requestOptions) {
+    var data = {
+      method: "post",
+      payload: {
+        method: "editMessageText",
+        chat_id: String(requestOptions.chat_id) || null,
+        message_id: requestOptions.message_id || null,
         inline_message_id: requestOptions.inline_message_id || null,
-        caption: requestOptions.caption || ':-)...',
+        text: requestOptions.text || "..",
         parse_mode: requestOptions.parse_mode || "HTML",
-        caption_entities: requestOptions.caption_entities || null,
+        entities: requestOptions.entities || null,
+        disable_web_page_preview: requestOptions.disable_web_page_preview || true,
         reply_markup: requestOptions.reply_markup || {}
       }
     };
-    var url = this.getApiBaseUrl() + "/editMessageCaption";
+
+    var url = this.getApiBaseUrl() + "/editMessageText";
+    return UrlFetchApp.fetch(url, data);
+  }
+
+  editMessageReplyMarkup(requestOptions) {
+    var data = {
+      method: "post",
+      payload: {
+        method: "editMessageReplyMarkup",
+        chat_id: String(requestOptions.chat_id) || null,
+        message_id: requestOptions.message_id || null,
+        inline_message_id: requestOptions.inline_message_id || null,
+        reply_markup: requestOptions.reply_markup || {}
+      }
+    };
+
+    var url = this.getApiBaseUrl() + "/editMessageReplyMarkup";
     return UrlFetchApp.fetch(url, data);
   }
 
@@ -314,6 +442,7 @@ class TelegramBotClient {
     return UrlFetchApp.fetch(url, data);
 
   }
+
   setMyDescription(description, language_code) {
     var data = {
       method: "post",
@@ -358,91 +487,6 @@ class TelegramBotClient {
     var response = UrlFetchApp.fetch(url);
 
     return response;
-  }
-
-  deleteMessage(chat_id, message_id) {
-    var url = `${this.getApiBaseUrl()}/deleteMessage?chat_id=${chat_id}&message_id=${message_id}`;
-    return UrlFetchApp.fetch(url);
-  }
-
-  copyMessage(from_chat_id, to_chat_id, message_id) {
-    var data = {
-      method: "post",
-      payload: {
-        method: "copyMessage",
-        chat_id: String(to_chat_id),
-        from_chat_id: String(from_chat_id),
-        message_id: String(message_id),
-      }
-    };
-    var url = this.getApiBaseUrl() + "/copyMessage";
-    return UrlFetchApp.fetch(url, data);
-  }
-
-  /**
-   * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
-   * https://core.telegram.org/bots/api#answercallbackquery
-   */
-  answerCallbackQuery(requestOptions) {
-    var data = {
-      method: "post",
-      payload: {
-        // Unique identifier for the query to be answered
-        callback_query_id: String(requestOptions.callback_query_id),
-        //The maximum amount of time in seconds that the result of the callback query may be cached client-side.
-        cache_time: requestOptions.cache_time || 0,
-        //Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
-        text: requestOptions.text || null,
-        //If True, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.
-        show_alert: requestOptions.show_alert || false,
-        //URL that will be opened by the user's client.
-        url: requestOptions.url || null
-      }
-    };
-    var url = this.getApiBaseUrl() + "/answerCallbackQuery";//?chat_id=" + chat_id;
-    return UrlFetchApp.fetch(url, data);
-  }
-
-
-  /**
-   * Post editMessageText to the API endpoint
-   * 
-   * @param {object} requestOptions The editMessageText paramters, see: https://core.telegram.org/bots/api#editmessagetext 
-   */
-  editMessageText(requestOptions) {
-    var data = {
-      method: "post",
-      payload: {
-        method: "editMessageText",
-        chat_id: requestOptions.chat_id || null, //String(requestOptions.chat_id),
-        message_id: requestOptions.message_id || null,
-        inline_message_id: requestOptions.inline_message_id || null,
-        text: requestOptions.text || "..",
-        parse_mode: requestOptions.parse_mode || "HTML",
-        entities: requestOptions.entities || null,
-        disable_web_page_preview: requestOptions.disable_web_page_preview || true,
-        reply_markup: requestOptions.reply_markup || {}
-      }
-    };
-
-    var url = this.getApiBaseUrl() + "/editMessageText";//?chat_id=" + chat_id;
-    return UrlFetchApp.fetch(url, data);
-  }
-
-  editMessageReplyMarkup(requestOptions) {
-    var data = {
-      method: "post",
-      payload: {
-        method: "editMessageReplyMarkup",
-        chat_id: requestOptions.chat_id || null, //String(requestOptions.chat_id),
-        message_id: requestOptions.message_id || null,
-        inline_message_id: requestOptions.inline_message_id || null,
-        reply_markup: requestOptions.reply_markup || {}
-      }
-    };
-
-    var url = this.getApiBaseUrl() + "/editMessageReplyMarkup";//?chat_id=" + chat_id;
-    return UrlFetchApp.fetch(url, data);
   }
 
   getApiBaseUrl() {
