@@ -3,61 +3,83 @@ class Test_TelegramBotClient {
         // Imports the following functions:
         // ok, equal, notEqual, deepEqual, notDeepEqual, strictEqual,
         // notStrictEqual, throws, module, test, asyncTest, expect
-        QUnit.helpers(this);
-        this.module("TelegramBotClient");
+        //QUnit.helpers(this);
+        QUnit.module(`TelegramBotClient`);
+        const scriptProperties = PropertiesService.getScriptProperties();
+        const token = scriptProperties.getProperty('BOT_TOKEN');
+        this.chatId = scriptProperties.getProperty('ADMIN_CHAT_ID');
+        this.botClient = new TelegramBotClient(token);
         this.runTests();
     }
 
     runTests() {
         let that = this;
-        this.test("test sendMessage", function (assert) {
-            that.test_sendMessage(assert);
+        QUnit.test("test sendMessage", function (assert) {
+            that.test_sendMessage();
             assert.ok(true, "sendMessage test");
         });
 
-        this.test("test sendPhoto", function (assert) {
-            that.test_sendPhoto(assert);
+        QUnit.test("test sendPhoto", function (assert) {
+            that.test_sendPhoto();
             assert.ok(true, "sendPhoto test");
         });
-    }
 
-    test_sendMessage(assert) {
-        const scriptProperties = PropertiesService.getScriptProperties();
-        const token = scriptProperties.getProperty('BOT_TOKEN');
-        const chat_id = scriptProperties.getProperty('ADMIN_CHAT_ID');
-        const botClient = new TelegramBotClient(token);
-        const res = botClient.sendMessage({
-            chat_id: chat_id,
-            text: "Hi.. this is test"
+        QUnit.test("test editMessageText", function (assert) {
+            that.test_editMessageText();
+            assert.ok(true, "editMessageText test");
         });
 
-        const result = JSON.parse(res).result;
-        return result.message_id;
+        QUnit.test("test deleteMessage", function (assert) {
+            that.test_deleteMessage();
+            assert.ok(true, "deleteMessage test");
+        });
     }
 
-    test_sendPhoto(assert) {
-        const scriptProperties = PropertiesService.getScriptProperties();
-        const token = scriptProperties.getProperty('BOT_TOKEN');
-        const chat_id = scriptProperties.getProperty('ADMIN_CHAT_ID');
-        const botClient = new TelegramBotClient(token);
-        const res = botClient.sendPhoto({
-            chat_id: chat_id,
+    test_sendMessage() {
+        const res = this.botClient.sendMessage({
+            chat_id: this.chatId,
+            text: "Hi.. this is test message from Google Apps Script",
+            reply_markup: {
+                inline_keyboard: [
+                    [{ text: "Button 1", callback_data: "button1" }],
+                    [{ text: "Button 2", callback_data: "button2" }]
+                ]
+            }
+        });
+
+        return JSON.parse(res).result;
+    }
+
+    test_sendPhoto() {
+        const res = this.botClient.sendPhoto({
+            chat_id: this.chatId,
             photo: "https://www.gstatic.com/webp/gallery/1.jpg",
-            caption: "This is test photo"
+            caption: "This is test photo (caption)"
         });
 
-        const result = JSON.parse(res).result;
-        return result.message_id;
+        return JSON.parse(res).result;
     }
 
-    test_deleteMessage(assert) {
-        const scriptProperties = PropertiesService.getScriptProperties();
-        const token = scriptProperties.getProperty('BOT_TOKEN');
-        const chat_id = scriptProperties.getProperty('ADMIN_CHAT_ID');
-        const botClient = new TelegramBotClient(token);
-        botClient.deleteMessage({
-            chat_id: chat_id,
-            message_id: messageId
+    test_editMessageText() {
+        const message = this.test_sendMessage();
+        this.botClient.editMessageText({
+            chat_id: this.chatId,
+            message_id: message.message_id,
+            text: "This is edited message",
+            reply_markup: {
+                inline_keyboard: [
+                    [{ text: "Button X", callback_data: "buttonx" }],
+                    [{ text: "Button Y", callback_data: "buttony" }]
+                ]
+            }
+        });
+    }
+
+    test_deleteMessage() {   
+        const message = this.test_sendMessage();
+        this.botClient.deleteMessage({
+            chat_id: this.chatId,
+            message_id: message.message_id
         });
     }
 }

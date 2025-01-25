@@ -1,6 +1,4 @@
 function setMyBotInfo() {
-
-
 }
 
 /** Webhok for telegram bot */

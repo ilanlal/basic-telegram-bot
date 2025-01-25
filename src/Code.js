@@ -17,33 +17,28 @@ function doPost(e) {
 
 function handelBotCommand(message) {
     const chat_id = message.from.id;
-    const command = message.text;
-    const resource = getResource(message.from.language_code);
-
-    // initilize bot client
-    const scriptProperties = PropertiesService.getScriptProperties();
-    const botToken = scriptProperties.getProperty('BOT_TOKEN');
-    const botClient = new TelegramBotClient(botToken);
 
     if (command === "/start") {
-        const reply_markup = {
-            inline_keyboard: resource?.start?.reply_markup || {}
-        }
-        return botClient.sendMessage({
-            chat_id: chat_id,
-            text: resource?.start?.text || '..🫢..🫢',
-            reply_markup: JSON.stringify(reply_markup)
+        return doAction({
+            'message': 'start',
+            'chat_id': chat_id,
+            'language_code': message?.from?.language_code
         });
     }
 
     if (command === "/help") {
-        const reply_markup = {
-            inline_keyboard: resource?.help?.reply_markup || {}
-        }
-        return botClient.sendMessage({
-            chat_id: chat_id,
-            text: resource?.help?.text || '..🫢..🫢',
-            reply_markup: JSON.stringify(reply_markup)
+        return doAction({
+            'message': 'help',
+            'chat_id': chat_id,
+            'language_code': message?.from?.language_code
+        });
+    }
+
+    if (command === "/about") {
+        return doAction({
+            'message': 'about',
+            'chat_id': chat_id,
+            'language_code': message?.from?.language_code
         });
     }
 }
@@ -52,32 +47,41 @@ function handleCallbackQuery(callback_query) {
     const chat_id = callback_query.from.id;
     const language_code = callback_query.from.language_code;
     const resource = getResource(language_code);
-    const data_text = callback_query.data;
+    const text = callback_query.data;
     const scriptProperties = PropertiesService.getScriptProperties();
     const botToken = scriptProperties.getProperty('BOT_TOKEN');
     const botClient = new TelegramBotClient(botToken);
 
-    this.botClient.answerCallbackQuery({
-        callback_query_id: callback_query.id,
-        text: resource.thanks.text || '🫢',
-        cache_time: 10
-    });
-
-    if (data_text === 'like') {
-        const reply_markup = {
-            inline_keyboard: resource?.help?.reply_markup || {}
-        }
+    if (text === 'code=like') {
         return botClient.sendMessage({
             chat_id: chat_id,
-            text: resource.thanks.text || '🫢',
-            reply_markup: JSON.stringify(reply_markup)
+            text: 'Thanks for your feedback'
         });
     }
 
-    if (data_text === 'whoami') {
-        return botClient.sendMessage({
+    if (text === 'code=whoami') {
+        return botClient.editMessageText({
             chat_id: chat_id,
             text: `${chat_id} ${language_code}`
         });
     }
+}
+
+function doAction({ message, chat_id, language_code }) {
+    const action = getAction({message, language_code});
+
+    if (!action) {
+        throw new Error(`Action not found for ${message}`);
+    }
+
+    let options = {
+        'chat_id': chat_id,
+        ...action?.payload
+    };
+
+    // initilize bot client
+    const scriptProperties = PropertiesService.getScriptProperties();
+    const botToken = scriptProperties.getProperty('BOT_TOKEN');
+    const botClient = new TelegramBotClient(botToken);
+    return botClient.sendMessage(options);
 }

@@ -1,4 +1,4 @@
-class Test_ProjectState {
+class Test_Setup {
     constructor() {
         // Imports the following functions:
         // ok, equal, notEqual, deepEqual, notDeepEqual, strictEqual,
@@ -10,12 +10,11 @@ class Test_ProjectState {
         this.chat_id = scriptProperties.getProperty('ADMIN_CHAT_ID');
         this.botClient = new TelegramBotClient(this.botToken);
 
-        this.module("Project setup module");
+        this.module(`Setup`);
         this.runTests();
     }
     runTests() {
         this.test_ProjectProperties();
-        //this.test_setWebhook();
     }
 
     test_ProjectProperties() {

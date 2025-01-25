@@ -1,5 +1,6 @@
-# Basic Telegram Bot ```0.0.1-beta```
-[![clasp](https://img.shields.io/badge/built%20with-clasp-4285f4.svg)](https://github.com/google/clasp)
+# Basic Telegram Bot `vnext`
+ - [![clasp](https://img.shields.io/badge/built%20with-clasp-4285f4.svg)](https://github.com/google/clasp)
+ - Bot API 8.2
 
 Telegram bot with Google Apps Script - 100% Free
 
