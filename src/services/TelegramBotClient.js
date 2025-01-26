@@ -1,5 +1,5 @@
 /**
- * @version 1.0.2
+ * @version 1.0.1
  * @class TelegramBotClient
  * @classdesc This class is used to interact with the Telegram Bot API.
  * @example

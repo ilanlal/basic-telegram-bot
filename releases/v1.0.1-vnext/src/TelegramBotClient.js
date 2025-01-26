@@ -1,10 +1,9 @@
 /**
- * @version 1.0.2
+ * @version 1.0.1
  * @class TelegramBotClient
  * @classdesc This class is used to interact with the Telegram Bot API.
  * @example
  * const botToken = [YOUR_BOT_TOKEN];
- * const chat_id = [YOUR_CHAT_ID];
  * const botClient = new TelegramBotClient(botToken);
  * 
  * botClient.sendMessage({
@@ -33,7 +32,6 @@ class TelegramBotClient {
    * @param {object} requestOptions The sendMessage paramters, see: https://core.telegram.org/bots/api#sendmessage
    * @param {string} requestOptions.chat_id Unique identifier for the target chat or username of the target channel (in the format @channelusername)
    * @param {string} requestOptions.text Text of the message to be sent, 1-4096 characters after entities parsing
-   * To see the full list of parameters, see: https://core.telegram.org/bots/api#sendmessage
    * @returns {object} The response from the API endpoint.
    * 
    * @example
@@ -55,19 +53,17 @@ class TelegramBotClient {
       throw new Error("text is required!");
     }
     const options = {
-      'business_connection_id': requestOptions.business_connection_id || null,
       'chat_id': String(requestOptions.chat_id) || null,
       'message_thread_id': requestOptions.message_thread_id || null,
       'text': requestOptions.text || ':-)...',
       'parse_mode': requestOptions.parse_mode || "HTML",
       'entities': requestOptions.entities || null,
-      'link_preview_options': requestOptions.link_preview_options || null,
+      'disable_web_page_preview': requestOptions.disable_web_page_preview || true,
       'disable_notification': requestOptions.disable_notification || true,
       'protect_content': requestOptions.protect_content || false,
-      'allow_paid_broadcast': requestOptions.allow_paid_broadcast || false,
-      'message_effect_id': requestOptions.message_effect_id || null,
-      'reply_markup': requestOptions.reply_markup || {},
-      'reply_parameters': requestOptions.reply_parameters || null
+      'reply_to_message_id': requestOptions.reply_to_message_id || null,
+      'allow_sending_without_reply': requestOptions.allow_sending_without_reply || true,
+      'reply_markup': requestOptions.reply_markup || {}
     };
 
     const data = {
@@ -82,61 +78,28 @@ class TelegramBotClient {
 
   /**
    * Use this method to send photos. On success, the sent Message is returned.
-   * @see https://core.telegram.org/bots/api#sendphoto
    * 
-   * @param {object} requestOptions The sendPhoto paramters, see: https://core.telegram.org/bots/api#sendphoto
-   * @param {string} requestOptions.chat_id Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-   * @param {string} requestOptions.photo Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data.
-   * 
-   * To see the full list of parameters, see: https://core.telegram.org/bots/api#sendphoto
-   * @returns {object} The response from the API endpoint.
-   * 
-   * @example
-   * const botToken = [YOUR_BOT_TOKEN];
-   * const chatId = [YOUR_CHAT_ID];
-   * const botClient = new TelegramBotClient(botToken);
-   * 
-   * botClient.sendPhoto({
-   *  chat_id: chatId,
-   *  photo: "https://example.com/image.jpg",
-   *  caption: "This is a <b>test image</b>",
-   *  parse_mode: "HTML",
-   *  has_spoiler: false,
-   *  disable_notification: true,
-   *  protect_content: false
-   * });
+   * https://core.telegram.org/bots/api#sendphoto
    */
+
   sendPhoto(requestOptions) {
-    if(!requestOptions.chat_id) {
-      throw new Error("chat_id is required!");
-    }
-
-    if(!requestOptions.photo) {
-      throw new Error("photo is required!");
-    }
-
     var data = {
-      'chat_id': String(requestOptions.chat_id),
+      'chat_id': requestOptions.chat_id,
       'photo': requestOptions.photo,
       'caption': requestOptions.caption,
-      'business_connection_id': requestOptions.business_connection_id || null,
       'parse_mode': requestOptions.parse_mode || "HTML",
       'has_spoiler': requestOptions.has_spoiler || false,
       'disable_notification': requestOptions.disable_notification || true,
       'protect_content': requestOptions.protect_content || false,
       'reply_to_message_id': requestOptions.reply_to_message_id || null,
       'allow_sending_without_reply': requestOptions.allow_sending_without_reply || true,
-      'show_caption_above_media': requestOptions.show_caption_above_media || false,
-      'allow_paid_broadcast': requestOptions.allow_paid_broadcast || false,
-      'message_effect_id': requestOptions.message_effect_id || null,
-      'reply_markup': requestOptions.reply_markup || {},
-      'reply_parameters': requestOptions.reply_parameters || null,
-      'message_thread_id': requestOptions.message_thread_id || null
+      'reply_markup': requestOptions.reply_markup || {}
     };
 
     var options = {
       'method': 'post',
       'contentType': 'application/json',
+      // Convert the JavaScript object to a JSON string.
       'payload': JSON.stringify(data)
     };
 
@@ -150,17 +113,8 @@ class TelegramBotClient {
    * @param {object} requestOptions The editMessageMedia paramters, see: https://core.telegram.org/bots/api#editMessageMedia 
    */
   editMessageMedia(requestOptions) {
-    if (!requestOptions.chat_id) {
-      throw new Error("chat_id is required!");
-    }
-    if(!requestOptions.media) {
-      throw new Error("media is required!");
-    }
-    if(!requestOptions.message_id) {
-      throw new Error("message_id is required!");
-    }
     var data = {
-      'chat_id': String(requestOptions.chat_id),
+      'chat_id': requestOptions.chat_id,
       'media': requestOptions.media,
       'message_id': requestOptions.message_id,
       //'inline_message_id': requestOptions.inline_message_id || null,

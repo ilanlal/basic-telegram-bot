@@ -1,4 +1,4 @@
-# Basic Telegram Bot `vnext`
+# Basic Telegram Bot `v1.0.0`
  - [![clasp](https://img.shields.io/badge/built%20with-clasp-4285f4.svg)](https://github.com/google/clasp)
  - Bot API 8.2
 
