@@ -9,8 +9,9 @@ function doGet(e) {
 }
 
 function doGetMainTest() {
-    new Test_Logic();
-    new Test_Setup();
+    new Test_AppSecrets();
     new Test_TelegramBotClient();
+    new Test_AppResources();
+    new Test_AppSetup();
     new Test_E2E();
 }

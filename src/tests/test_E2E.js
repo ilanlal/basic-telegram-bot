@@ -5,10 +5,9 @@ class Test_E2E {
         // notStrictEqual, throws, module, test, asyncTest, expect
         //QUnit.helpers(this);
         QUnit.module(`E2E`);
-
-        const scriptProperties = PropertiesService.getScriptProperties();
-        const botToken = scriptProperties.getProperty('BOT_TOKEN');
-        this.chatId = scriptProperties.getProperty('ADMIN_CHAT_ID');
+        this.DEFAULT_LANGUAGE_CODE = 'en';
+        const botToken = AppSecrets.BOT_TOKEN;
+        this.chatId = AppSecrets.ADMIN_CHAT_ID;
         this.botClient = new TelegramBotClient(botToken);
 
         this.runTests();
@@ -31,7 +30,7 @@ class Test_E2E {
         return doAction({
             'message': action,
             'chat_id': this.chatId,
-            'language_code': DEFAULT_LANGUAGE_CODE
+            'language_code': this.DEFAULT_LANGUAGE_CODE
         });
     }
 }

@@ -46,11 +46,8 @@ function handelBotCommand(message) {
 function handleCallbackQuery(callback_query) {
     const chat_id = callback_query.from.id;
     const language_code = callback_query.from.language_code;
-    const resource = getResource(language_code);
     const text = callback_query.data;
-    const scriptProperties = PropertiesService.getScriptProperties();
-    const botToken = scriptProperties.getProperty('BOT_TOKEN');
-    const botClient = new TelegramBotClient(botToken);
+    const botClient = new TelegramBotClient(AppSecrets.BOT_TOKEN);
 
     if (text === 'code=like') {
         return botClient.sendMessage({
@@ -68,7 +65,7 @@ function handleCallbackQuery(callback_query) {
 }
 
 function doAction({ message, chat_id, language_code }) {
-    const action = getAction({message, language_code});
+    const action = AppResources.getAction({message, language_code});
 
     if (!action) {
         throw new Error(`Action not found for ${message}`);
@@ -80,8 +77,6 @@ function doAction({ message, chat_id, language_code }) {
     };
 
     // initilize bot client
-    const scriptProperties = PropertiesService.getScriptProperties();
-    const botToken = scriptProperties.getProperty('BOT_TOKEN');
-    const botClient = new TelegramBotClient(botToken);
+    const botClient = new TelegramBotClient(AppSecrets.BOT_TOKEN);
     return botClient.sendMessage(options);
 }

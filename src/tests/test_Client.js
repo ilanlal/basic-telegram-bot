@@ -5,9 +5,9 @@ class Test_TelegramBotClient {
         // notStrictEqual, throws, module, test, asyncTest, expect
         //QUnit.helpers(this);
         QUnit.module(`TelegramBotClient`);
-        const scriptProperties = PropertiesService.getScriptProperties();
-        const token = scriptProperties.getProperty('BOT_TOKEN');
-        this.chatId = scriptProperties.getProperty('ADMIN_CHAT_ID');
+        
+        const token = AppSecrets.BOT_TOKEN;
+        this.chatId = AppSecrets.ADMIN_CHAT_ID;
         this.botClient = new TelegramBotClient(token);
         this.runTests();
     }
