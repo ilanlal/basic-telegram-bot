@@ -1,8 +1,11 @@
 # Releases of the project
+
 You can use the `TelegramBotClient` class to interact with the Telegram Bot API. The class provides methods to send messages, edit messages, and manage the bot's webhook. The class is available as a library in Google Apps Script. To use it, follow the instructions below.
 
 ## Quick start
+
 ### Add the library to your Apps Script project
+
 The class is available as a library in Google Apps Script. To use it, follow these steps:
 
 1. Open the Apps Script editor.
@@ -29,8 +32,8 @@ function sendHelloWorld() {
 }
 ```
 
-
 ## Overview
+
 This directory contains the releases of the project. Each release is a directory with the following structure:
 
 - `README.md`: a description of the release.
@@ -40,4 +43,3 @@ This directory contains the releases of the project. Each release is a directory
 
 - [v1.0.0](v1.0.0/README.md)
 - [v1.0.1](v1.0.1/README.md) - vnext
-
