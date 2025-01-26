@@ -15,4 +15,3 @@
 ## Push & Deploy
 
 `clasp push -w` or `clasp push`
-`clasp deploy -d "0.0.1-beta" -i "AKfycbzscwb13UwgXl9NZxeEg99uX5zVh20orRRJx4tDq-AaGoo1cjYYNNTioKnhItkuPsvN"`
