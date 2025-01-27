@@ -14,6 +14,7 @@
  * 
  * @see https://github.com/ilanlal/basic-telegram-bot
  */
+
 class TelegramBotClient {
   /**
    * @param {string} botToken The bot token from the Telegram Bot API.
@@ -609,3 +610,14 @@ class TelegramBotClient {
     this.sendChatAction(chat_id, "upload_video_note");
   }
 }
+
+/**
+ * Get an instance of the TelegramBotClient class.
+ * @param {string} token The bot token from the Telegram Bot API.
+ * @return {TelegramBotClient} An instance of the TelegramBotClient class.
+ */
+function getTelegramBotClient(token) {
+  return new TelegramBotClient(token);
+}
+
+

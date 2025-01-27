@@ -7,6 +7,12 @@
         "version": "0",
         "libraryId": "1jvNKvJric7Kbc6wWphMJZIfJ0w8wurlHymoGpkE-i26P_srJifxQhFr1",
         "developmentMode": true
+      },
+      {
+        "userSymbol": "TelegramBotClientSDK",
+        "version": "0",
+        "libraryId": "1DDZlfXvzArILhaX1IPakwcrPXW-aaMatA3JRJYmlFaBKZsUaKen7F5-y",
+        "developmentMode": true
       }
     ]
   },
