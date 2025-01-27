@@ -30,35 +30,42 @@ class AppHandlers {
     const language_code = callback_query.from.language_code;
     const text = callback_query.data;
 
-    if (text === 'code=like') {
-      return this.botClient.sendMessage({
+    if (text.startsWith('code=')) {
+      const code = text.split('=')?.[1];
+      return this.handelCustomCode({
+        code: code,
         chat_id: chat_id,
-        text: 'Thanks for your feedback'
+        language_code: language_code
       });
     }
 
-    if (text === 'code=whoami') {
-      return this.botClient.editMessageText({
-        chat_id: chat_id,
-        text: `${chat_id}`
+    if (text.startsWith('action=')) {
+      const name = text.split('=')?.[1];
+      return this.doAction({
+        'name': name,
+        'language_code': language_code,
+        'chat_id': chat_id,
+        'message_id': callback_query?.message?.message_id,
+        'callback_query_id': callback_query.id
       });
     }
   }
 
   handelBotCommand(message) {
     const chat_id = message.from.id;
-    const command = message.text.split(' ')[0];
-    const params = message.text.split(' ')?.[1];
+    const text = message.text;
 
-    if (command === "/start") {
+    if (text.startsWith("/start")) {
+      const params = message.text.split(' ')?.[1];
       return this.doAction({
         'name': params || 'start',
         'chat_id': chat_id,
+        'message_id': message.message_id,
         'language_code': message?.from?.language_code
       });
     }
 
-    if (command === "/help") {
+    if (text.startsWith("/help")) {
       return this.doAction({
         'name': 'help',
         'chat_id': chat_id,
@@ -66,13 +73,26 @@ class AppHandlers {
       });
     }
 
-    if (command === "/about") {
+    if (text.startsWith("/about")) {
       return this.doAction({
         'name': 'about',
         'chat_id': chat_id,
         'language_code': message?.from?.language_code
       });
     }
+
+    throw new Error(`Command not supported: ${command}`);
+  }
+
+  handelCustomCode({ code, chat_id }) {
+    if (code === 'whoami') {
+      return this.botClient.sendMessage({
+        'text': chat_id,
+        'chat_id': chat_id
+      });
+    }
+
+    throw new Error(`Custom Code not supported: "${code}"`);
   }
 
   doAction({

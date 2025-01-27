@@ -24,30 +24,39 @@ class Test_AppHandlers {
             assert.ok(true, "resource about test done");
         });
 
-        QUnit.test("test handel message event", function (assert) {
-            that.test_handelMessageEvent();
-            assert.ok(true, "message event test done");
+        QUnit.test("test callback query custom code event", function (assert) {
+            that.test_handelCallbackQueryCustomCodeEvent();
+            assert.ok(true, "custom code event test done");
         });
 
-        QUnit.test("test callback query event", function (assert) {
-            that.test_handelCallbackQueryEvent();
-            assert.ok(true, "callback query event test done");
+        QUnit.test("test bot command", function (assert) {
+            const commands = ['/start', '/start help', '/help', '/about'];
+            commands.forEach((command) => {
+                that.test_handelBotCommand(command);
+                assert.ok(true, `bot command ${command} test done`);
+            });
         });
 
-        QUnit.test("test doPost event", function (assert) {
-            that.test_handelDoPost();
-            assert.ok(true, "doPost event test done");
+        QUnit.test("test notfound command throw error", function (assert) {
+            assert.throws(() => {
+                that.test_handelBotCommand("/notfound");
+            }, "throws error");
+        });
+
+        QUnit.test("test callback query action event", function (assert) {
+            that.test_handelCallbackQueryActionEvent();
+            assert.ok(true, "action event test done");
         });
     }
 
-    test_handelDoPost() {
+    test_handelBotCommand(text) {
         let e = {
             postData: {
                 contents: JSON.stringify({
                     message: {
                         entities: [{ type: "bot_command" }],
                         from: { id: this.chatId },
-                        text: "/start"
+                        text: text
                     }
                 })
             }
@@ -55,23 +64,34 @@ class Test_AppHandlers {
         return this.handlers.handelDoPost(e);
     }
 
-    test_handelMessageEvent() {
-        let message = {
-            entities: [{ type: "bot_command" }],
-            from: { id: this.chatId },
-            text: "/start"
+    test_handelCallbackQueryCustomCodeEvent() {
+        let e = {
+            postData: {
+                contents: JSON.stringify({
+                    callback_query: {
+                        from: { id: this.chatId, language_code: this.DEFAULT_LANGUAGE_CODE },
+                        data: 'code=whoami'
+                    }
+                })
+            }
         };
 
-        return this.handlers.handelMessageEvent(message);
+        return this.handlers.handelDoPost(e);
     }
 
-    test_handelCallbackQueryEvent() {
-        let callback_query = {
-            from: { id: this.chatId, language_code: this.DEFAULT_LANGUAGE_CODE },
-            data: 'code=like'
+    test_handelCallbackQueryActionEvent() {
+        let e = {
+            postData: {
+                contents: JSON.stringify({
+                    callback_query: {
+                        from: { id: this.chatId, language_code: this.DEFAULT_LANGUAGE_CODE },
+                        data: 'action=start'
+                    }
+                })
+            }
         };
 
-        return this.handlers.handelCallbackQueryEvent(callback_query);
+        return this.handlers.handelDoPost(e);
     }
 
     test_doAction(action) {
