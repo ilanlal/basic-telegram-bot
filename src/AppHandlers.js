@@ -8,8 +8,8 @@ class AppHandlers {
     name,
     language_code,
     chat_id,
-    message_id = undefined,
-    callback_query_id = undefined
+    message_id,
+    callback_query_id
   }) {
     const action = AppResources.getAction({
       message: name,
