@@ -1,15 +1,13 @@
-class Test_E2E {
+class Test_AppHandlers {
     constructor() {
         // Imports the following functions:
         // ok, equal, notEqual, deepEqual, notDeepEqual, strictEqual,
         // notStrictEqual, throws, module, test, asyncTest, expect
         //QUnit.helpers(this);
-        QUnit.module(`E2E`);
+        QUnit.module(`AppHandlers`);
         this.DEFAULT_LANGUAGE_CODE = 'en';
-        const botToken = AppSecrets.BOT_TOKEN;
+        this.handlers = new AppHandlers();
         this.chatId = AppSecrets.ADMIN_CHAT_ID;
-        this.botClient = new TelegramBotClient(botToken);
-
         this.runTests();
     }
 
@@ -27,8 +25,8 @@ class Test_E2E {
     }
 
     test_doAction(action) {
-        return doAction({
-            'message': action,
+        return this.handlers.doAction({
+            'name': action,
             'chat_id': this.chatId,
             'language_code': this.DEFAULT_LANGUAGE_CODE
         });

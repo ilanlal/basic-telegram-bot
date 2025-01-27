@@ -12,10 +12,11 @@ class AppResources {
             return this.Resources[language_code];
         }
 
-        return this.Resources.en;
+        return this.Resources[this.DEFAULT_LANGUAGE_CODE];
     }
 
     static getBotInfo({ language_code }) {
+        
         return this.getResource({ language_code })?.bot;
     }
 

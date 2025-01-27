@@ -1,6 +1,6 @@
 function doGet(e) {
     QUnit.urlParams(e.parameter);
-    QUnit.config({ title: "Basic Telegram Bot Apps Script project, doGet(e) Unit tests." 
+    QUnit.config({ title: "Basic Telegram Bot. QUnit tests." 
         + ` v${Resources.version}`
      });
     QUnit.load(doGetMainTest);
@@ -13,5 +13,5 @@ function doGetMainTest() {
     new Test_TelegramBotClient();
     new Test_AppResources();
     new Test_AppSetup();
-    new Test_E2E();
+    new Test_AppHandlers();
 }

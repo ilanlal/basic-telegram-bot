@@ -59,7 +59,7 @@ function handleCallbackQuery(callback_query) {
     if (text === 'code=whoami') {
         return botClient.editMessageText({
             chat_id: chat_id,
-            text: `${chat_id} ${language_code}`
+            text: `${chat_id}`
         });
     }
 }
