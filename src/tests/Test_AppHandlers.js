@@ -13,18 +13,29 @@ class Test_AppHandlers {
 
     runTests() {
         let that = this;
-        QUnit.test("test doAction", function (assert) {
-            that.test_doAction('start');
+        QUnit.test("test doAction TextMessage as parent", function (assert) {
+            that.test_doActionOnTextMessage('start');
             assert.ok(true, "resource start test done");
 
-            that.test_doAction('help');
+            that.test_doActionOnTextMessage('help');
             assert.ok(true, "resource help test done");
 
-            that.test_doAction('about');
+            that.test_doActionOnTextMessage('about');
             assert.ok(true, "resource about test done");
         });
 
-        QUnit.test("test callback query custom code event", function (assert) {
+        QUnit.test("test doAction Photo as parent", function (assert) {
+            that.test_doActionOnMediaMessage('start');
+            assert.ok(true, "resource start test done");
+
+            that.test_doActionOnMediaMessage('help');
+            assert.ok(true, "resource help test done");
+
+            that.test_doActionOnMediaMessage('about');
+            assert.ok(true, "resource about test done");
+        });
+
+        QUnit.test("test custom code event", function (assert) {
             that.test_handelCallbackQueryCustomCodeEvent();
             assert.ok(true, "custom code event test done");
         });
@@ -50,10 +61,12 @@ class Test_AppHandlers {
     }
 
     test_handelBotCommand(text) {
+        const message = this._sendTextMessage();
         let e = {
             postData: {
                 contents: JSON.stringify({
                     message: {
+                        message_id: message.message_id,
                         entities: [{ type: "bot_command" }],
                         from: { id: this.chatId },
                         text: text
@@ -63,14 +76,15 @@ class Test_AppHandlers {
         };
         return this.handlers.handelDoPost(e);
     }
-
     test_handelCallbackQueryCustomCodeEvent() {
+        const message = this._sendTextMessage();
         let e = {
             postData: {
                 contents: JSON.stringify({
                     callback_query: {
                         from: { id: this.chatId, language_code: this.DEFAULT_LANGUAGE_CODE },
-                        data: 'code=whoami'
+                        data: 'code=whoami',
+                        message: { message_id: message.message_id }
                     }
                 })
             }
@@ -80,12 +94,14 @@ class Test_AppHandlers {
     }
 
     test_handelCallbackQueryActionEvent() {
+        const message = this._sendTextMessage();
         let e = {
             postData: {
                 contents: JSON.stringify({
                     callback_query: {
                         from: { id: this.chatId, language_code: this.DEFAULT_LANGUAGE_CODE },
-                        data: 'action=start'
+                        data: 'action=start',
+                        message: { message_id: message.message_id }
                     }
                 })
             }
@@ -94,12 +110,76 @@ class Test_AppHandlers {
         return this.handlers.handelDoPost(e);
     }
 
-    test_doAction(action) {
+    test_doActionOnTextMessage(action) {
+        const message = this._sendTextMessageWithKeyboard();
         return this.handlers.doAction({
             'name': action,
             'chat_id': this.chatId,
-            'language_code': this.DEFAULT_LANGUAGE_CODE
+            'language_code': this.DEFAULT_LANGUAGE_CODE,
+            'message': message,
         });
+    }
+    test_doActionOnMediaMessage(action) {
+        const message = this._sendPhotoMessage();
+        return this.handlers.doAction({
+            'name': action,
+            'chat_id': this.chatId,
+            'language_code': this.DEFAULT_LANGUAGE_CODE,
+            'message': message,
+        });
+    }
+
+    _sendTextMessage() {
+        const response = this.handlers.botClient.sendMessage({
+            'chat_id': this.chatId,
+            'text': '/start'
+        });
+
+        return JSON.parse(response).result;
+    }
+
+    _sendTextMessageWithKeyboard() {
+        const response = this.handlers.botClient.sendMessage({
+            'chat_id': this.chatId,
+            'text': '/start',
+            'reply_markup': {
+                inline_keyboard: [
+                    [{ text: "Button 1", callback_data: "button1" }],
+                    [{ text: "Button 2", callback_data: "button2" }]
+                ]
+            }
+        });
+
+        return JSON.parse(response).result;
+    }
+
+    _sendPhotoMessage() {
+        const response = this.handlers.botClient.sendMediaGroup({
+            chat_id: this.chatId,
+            media: [
+                {
+                    type: "photo",
+                    media: "https://www.gstatic.com/webp/gallery/1.jpg",
+                    caption: "This is photo 1"
+                },
+                {
+                    type: "photo",
+                    media: "https://www.gstatic.com/webp/gallery/2.jpg",
+                    caption: "This is photo 2"
+                },
+                {
+                    type: "photo",
+                    media: "https://www.gstatic.com/webp/gallery/3.jpg",
+                    caption: "This is photo 3"
+                },
+                {
+                    type: "photo",
+                    media: "https://www.gstatic.com/webp/gallery/4.jpg",
+                    caption: "This is photo 4"
+                }
+            ]
+        });
+        return JSON.parse(response).result;
     }
 }
 

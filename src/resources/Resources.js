@@ -26,9 +26,18 @@ const Resources = {
         actions: [
             {
                 message: 'start',
-                method: 'sendMessage',
+                method: 'sendPhoto',
                 payload: {
-                    text: 'Hello ‼️',
+                    caption: 'Hello ‼️' + '\n\n'
+                        + '<blockquote expandable>Expandable Block \n'
+                        + 'This is a simple bot that demonstrates the basic functionality of a Telegram bot.'
+                        + 'It provides the following commands:\n\n'
+                        + '/start - Start the bot\n'
+                        + '/help - Get help\n'
+                        + '/about - About the bot'
+                        + '</blockquote>',
+                    photo: 'https://source.unsplash.com/random/800x600',
+                    parse_mode: 'HTML',
                     reply_markup: {
                         inline_keyboard: [
                             [{ text: "YouTube™️", web_app: { url: "https://www.youtube.com" } }],
@@ -43,24 +52,24 @@ const Resources = {
             },
             {
                 message: 'help',
-                method: 'sendMessage',
+                method: 'editMessageText',
                 payload: {
-                    text: 'Help',
+                    text: 'Hi there! How can I help you?',
                     reply_markup: {
                         inline_keyboard: [
-                            [{ text: "like", callback_data: "code=like" }]
+                            [{ text: "BACK", callback_data: "action=start" }]
                         ]
                     }
                 }
             },
             {
                 message: 'about',
-                method: 'sendMessage',
+                method: 'editMessageText',
                 payload: {
-                    text: 'About',
+                    text: 'Hi there! I am a simple bot that demonstrates the basic functionality of a Telegram bot.',
                     reply_markup: {
                         inline_keyboard: [
-                            [{ text: "like", callback_data: "code=like" }]
+                            [{ text: "BACK", callback_data: "action=start" }]
                         ]
                     }
                 }
@@ -95,7 +104,15 @@ const Resources = {
                 message: 'start',
                 method: 'sendMessage',
                 payload: {
-                    text: 'Hola ‼️',
+                    text: '¡Hola ‼️' + '\n\n'
+                        + '<blockquote expandable>Bloque expandible 🤣\n'
+                        + 'Este es un bot simple que demuestra la funcionalidad básica de un bot de Telegram.'
+                        + 'Proporciona los siguientes comandos:'
+                        + '/start - Iniciar el bot\n'
+                        + '/help - Obtener ayuda\n'
+                        + '/about - Sobre el bot'
+                        + '</blockquote>',
+                    parse_mode: 'HTML',
                     reply_markup: {
                         inline_keyboard: [
                             [{ text: "YouTube™️", web_app: { url: "https://www.youtube.com" } }],
@@ -110,24 +127,24 @@ const Resources = {
             },
             {
                 message: 'help',
-                method: 'sendMessage',
+                method: 'editMessageText',
                 payload: {
-                    text: 'Ayuda',
+                    text: '¡Hola! ¿Cómo puedo ayudarte?',
                     reply_markup: {
                         inline_keyboard: [
-                            [{ text: "me gusta", callback_data: "code=like" }]
+                            [{ text: "VOLVER", callback_data: "action=start" }]
                         ]
                     }
                 }
             },
             {
                 message: 'about',
-                method: 'sendMessage',
+                method: 'editMessageText',
                 payload: {
-                    text: 'Sobre',
+                    text: '¡Hola! Soy un bot simple que demuestra la funcionalidad básica de un bot de Telegram.',
                     reply_markup: {
                         inline_keyboard: [
-                            [{ text: "me gusta", callback_data: "code=like" }]
+                            [{ text: "VOLVER", callback_data: "action=start" }]
                         ]
                     }
                 }
