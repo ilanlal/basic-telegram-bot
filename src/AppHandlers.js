@@ -162,10 +162,19 @@ class AppHandlers {
 
         return this.botClient.sendPhoto(options);
       case 'editMessageMedia':
-        return this.handelEditMessageMedia({
-          chat_id: chat_id,
-          requestOptions: action?.payload,
-          parentMessage: message
+        if (message?.photo) {
+          options = {
+            'chat_id': chat_id,
+            'message_id': message.message_id,
+            'media': message.photo?.[0],
+            ...action?.payload
+          };
+          return this.botClient.editMessageMedia(options);
+        }
+        return this.botClient.sendPhoto({
+          'chat_id': chat_id,
+          'photo': action?.payload?.media,
+          ...action?.payload
         });
       case 'editMessageCaption':
         options = {
@@ -262,8 +271,6 @@ class AppHandlers {
 
     this.botClient.sendPhoto({
       'chat_id': chat_id,
-      'photo': parentMessage.photo,
-      'caption': parentMessage.caption,
       'reply_markup': parentMessage.reply_markup,
       ...requestOptions
     });

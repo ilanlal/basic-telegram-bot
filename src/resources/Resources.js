@@ -36,7 +36,7 @@ const Resources = {
                         + '/help - Get help\n'
                         + '/about - About the bot'
                         + '</blockquote>',
-                    photo: 'https://source.unsplash.com/random/800x600',
+                    photo: "https://www.gstatic.com/webp/gallery/1.jpg",
                     parse_mode: 'HTML',
                     reply_markup: {
                         inline_keyboard: [
@@ -52,9 +52,11 @@ const Resources = {
             },
             {
                 message: 'help',
-                method: 'editMessageText',
+                method: 'editMessageMedia',
                 payload: {
-                    text: 'Hi there! How can I help you?',
+                    caption: 'Hi there! How can I help you?',
+                    parse_mode: 'HTML',
+                    media: "https://www.gstatic.com/webp/gallery/2.jpg",
                     reply_markup: {
                         inline_keyboard: [
                             [{ text: "BACK", callback_data: "action=start" }]
@@ -64,9 +66,10 @@ const Resources = {
             },
             {
                 message: 'about',
-                method: 'editMessageText',
+                method: 'editMessageMedia',
                 payload: {
-                    text: 'Hi there! I am a simple bot that demonstrates the basic functionality of a Telegram bot.',
+                    caption: 'Hi there! I am a simple bot that demonstrates the basic functionality of a Telegram bot.',
+                    media: "https://www.gstatic.com/webp/gallery/3.jpg",
                     reply_markup: {
                         inline_keyboard: [
                             [{ text: "BACK", callback_data: "action=start" }]
@@ -102,24 +105,25 @@ const Resources = {
         actions: [
             {
                 message: 'start',
-                method: 'sendMessage',
+                method: 'sendPhoto',
                 payload: {
-                    text: '¡Hola ‼️' + '\n\n'
-                        + '<blockquote expandable>Bloque expandible 🤣\n'
+                    caption: '¡Hola ‼️' + '\n\n'
+                        + '<blockquote expandable>Bloque expandible \n'
                         + 'Este es un bot simple que demuestra la funcionalidad básica de un bot de Telegram.'
-                        + 'Proporciona los siguientes comandos:'
+                        + 'Proporciona los siguientes comandos:\n\n'
                         + '/start - Iniciar el bot\n'
                         + '/help - Obtener ayuda\n'
                         + '/about - Sobre el bot'
                         + '</blockquote>',
-                    parse_mode: 'HTML',
+                    photo: "https://www.gstatic.com/webp/gallery/1.jpg",
+                    parse_mode: 'HTML', 
                     reply_markup: {
                         inline_keyboard: [
                             [{ text: "YouTube™️", web_app: { url: "https://www.youtube.com" } }],
-                            [{ text: "Quién soy", callback_data: "code=whoami" }],
+                            [{ text: "Who am I", callback_data: "code=whoami" }],
                             [
-                                { text: 'Ayuda', callback_data: "action=help" },
-                                { text: 'Sobre', callback_data: "action=about" }
+                                { text: 'Help', callback_data: "action=help" },
+                                { text: 'About', callback_data: "action=about" }
                             ]
                         ]
                     }
@@ -127,24 +131,27 @@ const Resources = {
             },
             {
                 message: 'help',
-                method: 'editMessageText',
+                method: 'editMessageMedia',
                 payload: {
-                    text: '¡Hola! ¿Cómo puedo ayudarte?',
+                    caption: '¡Hola! ¿Cómo puedo ayudarte?',
+                    parse_mode: 'HTML',
+                    media: "https://www.gstatic.com/webp/gallery/2.jpg",
                     reply_markup: {
                         inline_keyboard: [
-                            [{ text: "VOLVER", callback_data: "action=start" }]
+                            [{ text: "ATRÁS", callback_data: "action=start" }]
                         ]
                     }
                 }
             },
             {
                 message: 'about',
-                method: 'editMessageText',
+                method: 'editMessageMedia',
                 payload: {
-                    text: '¡Hola! Soy un bot simple que demuestra la funcionalidad básica de un bot de Telegram.',
+                    caption: '¡Hola! Soy un bot simple que demuestra la funcionalidad básica de un bot de Telegram.',
+                    media: "https://www.gstatic.com/webp/gallery/3.jpg",
                     reply_markup: {
                         inline_keyboard: [
-                            [{ text: "VOLVER", callback_data: "action=start" }]
+                            [{ text: "ATRÁS", callback_data: "action=start" }]
                         ]
                     }
                 }
