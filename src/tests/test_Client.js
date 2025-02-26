@@ -6,8 +6,8 @@ class Test_TelegramBotClient {
         //QUnit.helpers(this);
         QUnit.module(`TelegramBotClient`);
         
-        const token = AppSecrets.BOT_TOKEN;
-        this.chatId = AppSecrets.ADMIN_CHAT_ID;
+        const token = AspSecrets.BOT_TOKEN;
+        this.chatId = AspSecrets.ADMIN_CHAT_ID;
         this.botClient = new TelegramBotClient(token);
         this.runTests();
     }

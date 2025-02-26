@@ -1,4 +1,4 @@
-class AppResources {
+class AspResources {
     static get Resources() {
         return Resources;
     }

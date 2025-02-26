@@ -5,7 +5,7 @@ const WEB_APP_URL = "https://script.google.com/macros/s/[Deployment ID]/exec";
  */
 function getMe() {
     // initilize bot client
-    const botClient = new TelegramBotClient(AppSecrets.BOT_TOKEN);
+    const botClient = new TelegramBotClient(AspSecrets.BOT_TOKEN);
     const me = botClient.getMe();
     Logger.log(me);
 }
@@ -15,7 +15,7 @@ function getMe() {
  */
 function getWebhookInfo() {
     // initilize bot client
-    const botClient = new TelegramBotClient(AppSecrets.BOT_TOKEN);
+    const botClient = new TelegramBotClient(AspSecrets.BOT_TOKEN);
     const webhookInfo = botClient.getWebhookInfo();
     Logger.log(JSON.parse(webhookInfo).result);
 }
@@ -25,13 +25,13 @@ function getWebhookInfo() {
  */
 function setWebhook() {
     // initilize bot client
-    const botClient = new TelegramBotClient(AppSecrets.BOT_TOKEN);
+    const botClient = new TelegramBotClient(AspSecrets.BOT_TOKEN);
     const webhookInfo = botClient.getWebhookInfo();
     const result = JSON.parse(webhookInfo).result;
     if (result.url !== "") {
         throw new Error("Webhook is already enabled");
     }
-    const url = WEB_APP_URL.replace("[Deployment ID]", AppSecrets.DEPLOYMENT_ID);
+    const url = WEB_APP_URL.replace("[Deployment ID]", AspSecrets.DEPLOYMENT_ID);
     const response = botClient.setWebhook(url);
     Logger.log(JSON.parse(response).result);
 }
@@ -41,18 +41,18 @@ function setWebhook() {
  */
 function deleteWebhook() {
     // initilize bot client
-    const botClient = new TelegramBotClient(AppSecrets.BOT_TOKEN);
-    const url = WEB_APP_URL.replace("[Deployment ID]", AppSecrets.DEPLOYMENT_ID);
+    const botClient = new TelegramBotClient(AspSecrets.BOT_TOKEN);
+    const url = WEB_APP_URL.replace("[Deployment ID]", AspSecrets.DEPLOYMENT_ID);
     const response = botClient.deleteWebhook(url);
     Logger.log(JSON.parse(response).result);
 }
 
 function setMyBotInfo() {
     // initilize bot client
-    const botClient = new TelegramBotClient(AppSecrets.BOT_TOKEN);
+    const botClient = new TelegramBotClient(AspSecrets.BOT_TOKEN);
     langs = ["en", "es", undefined];
     langs.forEach(lang => {
-        const resource = AppResources.getBotInfo({language_code: lang});
+        const resource = AspResources.getBotInfo({language_code: lang});
         botClient.setMyName({
             'name': resource.name,
             'language_code': lang

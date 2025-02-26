@@ -6,8 +6,8 @@ class Test_AppHandlers {
         //QUnit.helpers(this);
         QUnit.module(`AppHandlers`);
         this.DEFAULT_LANGUAGE_CODE = 'en';
-        this.handlers = new AppHandlers();
-        this.chatId = AppSecrets.ADMIN_CHAT_ID;
+        this.handlers = new AspHandlers();
+        this.chatId = AspSecrets.ADMIN_CHAT_ID;
         this.runTests();
     }
 

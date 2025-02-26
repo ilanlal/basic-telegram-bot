@@ -1,4 +1,4 @@
-class AppSecrets {
+class AspSecrets {
     static get BOT_TOKEN() {
         const scriptProperties = PropertiesService.getScriptProperties();
         return scriptProperties.getProperty('BOT_TOKEN');

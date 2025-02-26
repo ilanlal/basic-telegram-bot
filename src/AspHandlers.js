@@ -1,7 +1,7 @@
-class AppHandlers {
+class AspHandlers {
   constructor() {
     // initilize bot client
-    this.botClient = new TelegramBotClient(AppSecrets.BOT_TOKEN);
+    this.botClient = new TelegramBotClient(AspSecrets.BOT_TOKEN);
   }
 
   handelDoPost(e) {
@@ -17,6 +17,13 @@ class AppHandlers {
   }
 
   handelMessageEvent(message) {
+    AspSpreadsheet.writeEvent({
+      dc: "doPost.Message",
+      action: message.text,
+      chat_id: message.from.id,
+      content: JSON.stringify(message),
+      event: "Info"
+    });
     if (message?.entities?.[0]?.type === "bot_command") {
       return this.handelBotCommand(message);
     }
@@ -30,6 +37,14 @@ class AppHandlers {
     const language_code = callback_query?.from?.language_code;
     const text = callback_query.data;
     const callback_message = callback_query?.message;
+
+    AspSpreadsheet.writeEvent({
+      dc: "doPost.CallbackQuery",
+      action: text,
+      chat_id: chat_id,
+      content: JSON.stringify(callback_query),
+      event: "Info"
+    });
     if (callback_query.id) {
       this.botClient.answerCallbackQuery({
         'callback_query_id': callback_query.id,
@@ -130,7 +145,7 @@ class AppHandlers {
     chat_id,
     message
   }) {
-    const action = AppResources.getAction({
+    const action = AspResources.getAction({
       message: name,
       language_code: language_code
     });
