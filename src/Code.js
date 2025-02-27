@@ -1,3 +1,9 @@
+// Code.gs
+function include(filename) {
+    return HtmlService.createHtmlOutputFromFile(filename)
+        .getContent();
+}
+
 function doPost(e) {
     try {
         const handler = new AspHandlers();
@@ -13,3 +19,4 @@ function doPost(e) {
         });
     }
 }
+

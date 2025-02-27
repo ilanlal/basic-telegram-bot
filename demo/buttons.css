@@ -1,0 +1,37 @@
+.button {
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    min-width: 80px;
+    max-width: 160px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.button.small {
+    min-width: 60px;
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+
+.button:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.button:active {
+    background-color: #AFAF00 !important;
+}
+
+.button.disabled {
+    background-color: #999 !important;
+    color: #555 !important;
+    box-shadow: none;
+}

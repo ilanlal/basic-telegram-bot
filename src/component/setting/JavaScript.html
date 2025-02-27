@@ -1,0 +1,201 @@
+<script>
+    (function () {
+        const Global_Resources = {
+            "module": "setting",
+            "version": "0.0.1",
+            "en": {
+                "welcome": "Welcome setting page",
+                "setting": "Setting",
+                "settingInfo": "Setting Info",
+                "settingInfoContent": "This is a simple setting page. It is designed to help you understand how to use this page.",
+                "token": "Token",
+                "deployments": "Deployments",
+                "deploy": "Deploy",
+                "deployUrl": "Deploy URL",
+                "deployUrlPlaceholder": "https://script.google.com/macros/s/.../exec",
+                "deployUrlHelp": "This is the URL of the deployed web app. It is used to call the web app from the web.",
+                "webhook": "Webhook",
+                "webhookUrl": "Webhook URL",
+                "webhookUrlPlaceholder": "https://api.telegram.org/bot.../setWebhook",
+                "webhookUrlHelp": "This is the URL of the webhook. It is used to set the webhook for the telegram bot.",
+                "webhookInfo": "Webhook Info",
+                "help": "Help",
+                "helpContent": "This is a simple help page. It is designed to help you understand how to use this page. "
+                    + "This is a simple help page. It is designed to help you understand how to use this page.",
+                "inputFields": [
+                    { "id": "token", "label": "Token", "placeholder": "Enter token", "defaultValue": "", "required": true },
+                    { "id": "deployUrl", "label": "Deploy URL", "placeholder": "Enter deploy URL", "defaultValue": "" },
+                    { "id": "webhookUrl", "label": "Webhook URL", "placeholder": "Enter webhook URL", "defaultValue": "" }
+                ],
+                "actions": [
+                    { "id": "save", "label": "Save", "handler": "SettingPage.ViewModel.onClick(event)" },
+                    { "id": "cancel", "label": "Cancel", "handler": "SettingPage.ViewModel.onClick(event)" }
+                ]
+            }
+        };
+
+        const locale = 'en';
+        const resources = Global_Resources[locale];
+
+        const _settingPage = this.SettingPage = {
+            // Model class
+            AppHandler: {
+                // start method
+                start: (e) => {
+                    console.log('😀 start', e);
+                    const viewModel = _settingPage.ViewModel;
+                    viewModel.start();
+                },
+            },
+            // View class
+            ViewModel: {
+                ONLINE_CARD_ID: 'online-card',
+                FORM_INPIT_CARD_ID: 'form-input-card',
+                // start method
+                start: () => {
+                    console.log('😀 ViewModel.start');
+                    _settingPage.CardView.renderPage({ container: document.getElementById("app") });
+                },
+                // onClick method
+                onClick: (e) => {                    
+                    console.log('😀 ViewModel.onClick', e);
+                    // check if required fields are filled
+                    const form = document.getElementById(_settingPage.ViewModel.FORM_INPIT_CARD_ID);
+                    if (form) {
+                        const inputs = form.querySelectorAll('input');
+                        let isValid = true;
+                        inputs.forEach((input) => {
+                            if (input.required && !input.value) {
+                                isValid = false;
+                            }
+                        });
+                        if (isValid) {
+                            e.preventDefault();    
+                        }
+                    }
+                    const viewModel = _settingPage.ViewModel;
+                    if (e.target.id === 'save'){
+                        console.log('😀 ViewModel.onClick', 'save');
+                    }
+                }
+            },
+
+            // CardView class
+            CardView: {
+                // renderSidebar method
+
+                /**
+                 * @param {Object} param0
+                 * @param {HTMLElement} param0.container
+                 */
+                renderPage: ({ container }) => {
+                    console.log('😀 renderPage', { container });
+                    if (!container) {
+                        return;
+                    }
+
+                    // Add container
+                    container.innerHTML = '<div class="container" id="appContainer"></div>';
+
+                    _settingPage.CardView.appendCard({
+                        container: container.querySelector('#appContainer'),
+                        key: _settingPage.ViewModel.ONLINE_CARD_ID,
+                        title: '<h1>ver: ' + Global_Resources.version + '</h1>'
+                    });
+
+                    _settingPage.CardView.appendCard({
+                        container: container.querySelector('#appContainer'),
+                        key: _settingPage.ViewModel.FORM_INPIT_CARD_ID,
+                        title: resources.settingInfo,
+                        subtitle: resources.settingInfoContent,
+                        inputFields: resources.inputFields,
+                        actions: resources.actions
+                    });
+
+                },
+                /**
+                 * @param {Object} param0
+                 * @param {HTMLElement} param0.container                 
+                 * @param {Array<{id:string,label:string,handler:string,className:string|undefined}>|undefined} param0.actions
+                 * @param {Array<{id:string,label:string,required:boolean|undefined,defaultValue:string|undefined,placeholder:string|undefined}>|undefined} param0.inputFields
+                 * @param {string} param0.key
+                 */
+                appendCard: ({ container, key, title, subtitle, content, tip, actions, inputFields, hidden }) => {
+                    console.log('😀 renderCard', { container, key, title, subtitle, content, tip, actions, inputFields, hidden });
+
+                    let html = '';
+                    // Card
+                    if (inputFields) {
+                        html += `<form id="${key}" class="card ${hidden ? 'hidden' : ''}">`;
+                    }
+                    else {
+                        html += `<div class="card ${hidden ? 'hidden' : ''}" id="${key}">`;
+                    }
+
+
+                    // Add card titlex
+                    html += `  <div class="title">${title}`;
+                    html += '    <div class="right led"></div>';
+                    if (subtitle) {
+                        html += `    <div class="subtitle1">${subtitle}</div>`;
+                    }
+                    html += '  </div>';
+                    // Add card content
+                    if (content) {
+                        html += '  <div class="content body1">';
+                        html += content || '';
+                        html += '  </div>';
+                    }
+                    if (inputFields) {
+                        html += '  <div class="content body1">';
+                        inputFields.forEach((inputField) => {
+                            html += '  <div class="input">';
+                            html += `    <label for="${inputField.id}">${inputField.label}</label>`;
+                            html += `    <input type="text" name="${inputField.id}" placeholder="${inputField.placeholder}" value="${inputField.defaultValue}" ${inputField.required ? 'required' : ''}>`;
+                            html += '  </div>';
+                        });
+                        html += '  </div>';
+                    }
+                    if (tip) {
+                        html += '  <div class="tip">';
+                        html += tip || '';
+                        html += '  </div>';
+                    }
+                    if (actions) {
+                        // Add card actions
+                        html += '  <div class="action">';
+                        actions.forEach((action) => {
+                            if (inputFields) {
+                                html += `    <input class="button ${action.className || 'primary'}" type="submit" value="${action.label}"`
+                                    + ` id="${action.id}" `
+                                    + ` onclick="${action.handler}" />`;
+                            }
+                            else {
+                                html += `    <input class="button ${action.className || 'primary'}" type="button" value="${action.label}"`
+                                    + ` id="${action.id}" `
+                                    + ` onclick="${action.handler}" />`;
+                            }
+                        });
+                        html += '  </div>';
+                    }
+
+                    // end of card
+                    if (inputFields) {
+                        html += '</form>';
+                    }
+                    else {
+                        html += '</div>';
+                    }
+
+                    if (container) {
+                        container.innerHTML += html;
+                    }
+
+                    return html;
+                }
+            }
+        };
+
+        _settingPage.AppHandler.start();
+    })();
+</script>

@@ -1,0 +1,39 @@
+form.card .content {
+    padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+form.card .content .input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 0 8px 0;
+}
+
+.input label {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 8px 0 0;
+    width: 100px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.input input[type="text"] {
+    font-size: 14px;
+    padding: 4px 8px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    min-width: 300px;
+}
+
+.input textarea {
+    font-size: 14px;
+    padding: 4px 8px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    min-width: 300px;
+    min-height: 40px;
+    resize: vertical;
+}
