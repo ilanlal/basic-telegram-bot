@@ -1,51 +1,6 @@
-const WEB_APP_URL = "https://script.google.com/macros/s/[Deployment ID]/exec";
-
-/**
- * Get bot info
- */
-function getMe() {
-    // initilize bot client
-    const botClient = new TelegramBotClient(AspSecrets.BOT_TOKEN);
-    const me = botClient.getMe();
-    Logger.log(me);
-}
-
-/**
- * Get webhook info
- */
-function getWebhookInfo() {
-    // initilize bot client
-    const botClient = new TelegramBotClient(AspSecrets.BOT_TOKEN);
-    const webhookInfo = botClient.getWebhookInfo();
-    Logger.log(JSON.parse(webhookInfo).result);
-}
-
-/** 
- * Set webhook for the bot to receive updates
- */
-function setWebhook() {
-    // initilize bot client
-    const botClient = new TelegramBotClient(AspSecrets.BOT_TOKEN);
-    const webhookInfo = botClient.getWebhookInfo();
-    const result = JSON.parse(webhookInfo).result;
-    if (result.url !== "") {
-        throw new Error("Webhook is already enabled");
-    }
-    const url = WEB_APP_URL.replace("[Deployment ID]", AspSecrets.DEPLOYMENT_ID);
-    const response = botClient.setWebhook(url);
-    Logger.log(JSON.parse(response).result);
-}
-
-/** 
- * Delete webhook for the bot to receive updates
- */
-function deleteWebhook() {
-    // initilize bot client
-    const botClient = new TelegramBotClient(AspSecrets.BOT_TOKEN);
-    const url = WEB_APP_URL.replace("[Deployment ID]", AspSecrets.DEPLOYMENT_ID);
-    const response = botClient.deleteWebhook(url);
-    Logger.log(JSON.parse(response).result);
-}
+/// <reference path="AspSecrets.js" />
+/// <reference path="AspResources.js" />
+/// <reference path="lib/TelegramBotClient.js" />
 
 function setMyBotInfo() {
     // initilize bot client

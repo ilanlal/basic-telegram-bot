@@ -1,0 +1,44 @@
+.card {
+    background-color: #999;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    display: inline-block;
+    min-width: 280px;
+    min-height:200px;
+    overflow: hidden;
+}
+
+.card .content {
+    display: block;
+    min-height:10px;
+    height: 140px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.card .content span {
+    display: block;
+    padding: 4px 10px;
+    width: 100%;
+}
+
+.card .content span.label {
+    background-color: #555;
+    color: #FFF;
+    font-size: 10px;
+    display: block;
+    border-radius: 5px 5px 0 0;
+    width: fit-content;
+    margin: 0 0 4px 0;
+    padding: 2px 4px;
+}
+
+.card .footer {
+    background-color: #555;
+    color: #FFF;
+    font-size: 12px;
+    padding: 10px;
+    border-radius: 0 0 5px 5px;
+    text-align: right;
+}

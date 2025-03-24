@@ -1,9 +1,10 @@
+// AddonMenu.gs
 class AddonMenu {
     constructor() {
         this.menu = [];
     }
 
-    addJsonStudionMenu() {
+    addJsonStudionMenu(e) {
         const ui = SpreadsheetApp.getUi();
 
         // The label for a menu item should be in sentence case (only the first word capitalized).
@@ -20,18 +21,27 @@ class AddonMenu {
             .addToUi();
     }
 
-    addTelegramBotMenu() {
-        const ui = SpreadsheetApp.getUi();
-
+    addTelegramBotMenu(e) {
         // The label for a menu item should be in sentence case (only the first word capitalized).
         // see https://developers.google.com/apps-script/reference/base/menu#detailed-documentation
-        ui.createMenu('Telegram bot')
-            .addItem("🤖 Setup a bot", 'AddonMenu.openSidebarBotSetup')
-            .addSeparator()
-            .addItem('⚙️ Project settings', 'AddonMenu.openDialogSetting')
-            .addSeparator()
-            .addItem('❔ Help', 'AddonMenu.openDialogHelp')
-            .addToUi();
+
+        const ui = SpreadsheetApp.getUi();
+        // see https://developers.google.com/workspace/add-ons/concepts/menus
+        if (e && e.authMode == ScriptApp.AuthMode.NONE) {
+            // Add a normal menu item (works in all authorization modes).
+            ui.createMenu('Bot')
+                .addItem('❔ Help', 'AddonMenu.openDialogHelp')
+                .addToUi();
+        } else {
+            ui.createMenu('Bot')
+                .addItem('⚙️ Project setup', 'AddonMenu.openSetupDialog')
+                .addItem("🤖 Send test message", 'AddonMenu.openTestMessageDialog')
+                .addSeparator()
+                .addItem('⚙️ Project settings', 'AddonMenu.openDialogSetting')
+                .addSeparator()
+                .addItem('❔ Help', 'AddonMenu.openDialogHelp')
+                .addToUi();
+        }
     }
 
     static minifyRange(e) {
@@ -103,26 +113,54 @@ class AddonMenu {
         //sheet.getRange(a1n).activate();
         const range = sheet.getRange(a1n);
         range.activateAsCurrentCell();
-        return openDialogEditor();
+        return AddonMenu.openDialogEditor();
+    }
+
+    static openSetupDialog(e) {
+        AddonMenu.openDialog(e, 'component/telegramBot/Index');
+    }
+
+    static openTestMessageDialog(e) {
+        AddonMenu.openDialog(e, 'component/telegramBot/SendTestMessage');
     }
 
     static openSidebarBotSetup(e) {
-        openSidebar(e, 'component/telegramBot/Index');
+        AddonMenu.openDialog(e, 'component/telegramBot/Index');
     }
 
     static openSidebarRangeReport(e) {
-        openSidebar(e, 'component/rangeReport/Index');
+        AddonMenu.openSidebar(e, 'component/rangeReport/Index');
     }
 
     static openDialogHelp(e) {
-        openDialog(e, 'component/help/Index');
+        AddonMenu.openDialog(e, 'component/help/Index');
     }
 
     static openDialogSetting(e) {
-        openDialog(e, 'component/setting/Index');
+        AddonMenu.openDialog(e, 'component/setting/Index');
     }
 
     static openDialogEditor(e) {
-        openDialog(e, 'component/editor/Index');
+        AddonMenu.openDialog(e, 'component/editor/Index');
+    }
+
+    static openDialog(e, file, title = '(-:', width = 480, height = 600) {
+        const htmlOutput = HtmlService
+            .createTemplateFromFile(file)
+            .evaluate()
+            .setHeight(height)
+            .setWidth(width);
+
+        SpreadsheetApp.getUi()
+            .showModalDialog(htmlOutput, title);
+    }
+
+    // This function is called when the user clicks on the "Open Sidebar" button in the add-on menu
+    static openSidebar(e, file) {
+        const htmlOutput = HtmlService
+            .createTemplateFromFile(file)
+            .evaluate()
+            .setTitle('JSON Studio');
+        SpreadsheetApp.getUi().showSidebar(htmlOutput);
     }
 }

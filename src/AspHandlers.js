@@ -1,3 +1,6 @@
+/// <reference path="AspSecrets.js" />
+/// <reference path="./lib/TelegramBotClient.js" />
+// AspHandlers.gs
 class AspHandlers {
   constructor() {
     // initilize bot client

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Telegram</title>
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/dialog.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/report.css">
+</head>
+
+<body>
+    <div class="app" id="app">
+        <div class="sidebar">
+            <div class="block">
+                <span class="block current">ver: 1.0.0</span>
+
+                <span class="block current">Telegram Bot</span>
+            </div>
+            <div class="block">
+                <span class="">🟡</span>
+                <span class="">🟢 Ready</span>
+            </div>
+            <div class="block card">
+                <div class="">Actionsss</div>
+                <div class="block content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="#" id="setting" onclick="SettingPage.ViewModel.onClick(event)">Setting</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" id="report" onclick="SettingPage.ViewModel.onClick(event)">Report</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" id="help" onclick="SettingPage.ViewModel.onClick(event)">Help</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" id="about" onclick="SettingPage.ViewModel.onClick(event)">About</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" id="logout" onclick="SettingPage.ViewModel.onClick(event)">Logout</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" id="exit" onclick="SettingPage.ViewModel.onClick(event)">Exit</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" id="close" onclick="SettingPage.ViewModel.onClick(event)">Close</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" id="cancel2" onclick="SettingPage.ViewModel.onClick(event)">Cancel</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" id="back" onclick="SettingPage.ViewModel.onClick(event)">Back</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" id="next" onclick="SettingPage.ViewModel.onClick(event)">Next</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="footer">
+                    <input class="action" type="submit" value="Bind selected range" id="bind"
+                        onclick="SettingPage.ViewModel.onClick(event)">
+                </div>
+            </div>
+            <form id="form-input-card" class="block card">
+                <div class="block">Setting Info <div class="right led"></div>
+                    <div class="current">This is a simple setting page. It is designed to help you understand how to
+                        use this page.</div>
+                    <div class="">
+                        <span>💡</span>
+                        <span class="gray"> Welcome to JSON Studio.
+
+                            This add-on helps you to validate JSON data in Google Sheets.
+                            To get started, select a range of cells and click on the 'Bind selected range' button.
+                            The add-on will validate the JSON data in the selected range and display the results in a
+                            report.
+                        </span>
+                    </div>
+                </div>
+                <div class="inline form-group">
+                    <span class="input">
+                        <labbel for="token">Token</labbel>
+                        <input type="text" name="token" placeholder="Enter token" value="" required="">
+                    </span>
+                    <span class="input">
+                        <label for="deployUrl">Deploy URL</label>
+                        <textarea rows="3" cols="15" spellcheck="false" name="deployUrl" placeholder="Enter deploy URL"
+                            required=""></textarea>
+                    </span>
+                    <span class="input">
+                        <label for="webhookUrl">Webhook URL</label>
+                        <input type="text" name="webhookUrl" placeholder="Enter webhook URL" value="">
+                    </span>
+                </div>
+                <div class="footer">
+                    <input class="share" type="submit" value="Save" id="save"
+                        onclick="SettingPage.ViewModel.onClick(event)">
+                    <input class="create" type="submit" value="Cancel" id="cancel"
+                        onclick="SettingPage.ViewModel.onClick(event)">
+                </div>
+            </form>
+            <div class="sidebar branding-below">
+                <span class="gray">
+                    Translate sample by Google</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

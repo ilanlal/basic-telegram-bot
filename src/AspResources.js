@@ -7,7 +7,7 @@ class AspResources {
         return 'en';
     }
 
-    static getResource({ language_code }) {
+    static getResource({ language_code }){
         if (language_code && this.Resources?.[language_code]) {
             return this.Resources[language_code];
         }

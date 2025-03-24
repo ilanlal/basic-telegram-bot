@@ -1,13 +1,9 @@
+// AspSecrets.gs
 class AspSecrets {
     static get BOT_TOKEN() {
         const scriptProperties = PropertiesService.getScriptProperties();
         return scriptProperties.getProperty('BOT_TOKEN');
-    }
-
-    static get WEB_APP_URL() {
-        const scriptProperties = PropertiesService.getScriptProperties();
-        return scriptProperties.getProperty('WEB_APP_URL');
-    }
+    } 
 
     static get DEPLOYMENT_ID() {
         const scriptProperties = PropertiesService.getScriptProperties();

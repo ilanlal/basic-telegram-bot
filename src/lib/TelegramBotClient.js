@@ -462,7 +462,7 @@ class TelegramBotClient {
    * Use this method to set a new webhook for the bot. Requires the URL to be set. Returns True on success.
    * @see https://core.telegram.org/bots/api#setwebhook
    * @param {string} webAppUrl The URL of the web app.
-   * @returns {object} The response from the API endpoint.
+   * @returns {Response|} The response from the API endpoint.
    **/
   setWebhook(webAppUrl) {
     if (webAppUrl) {

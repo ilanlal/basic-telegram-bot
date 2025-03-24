@@ -11,7 +11,7 @@ form.card .content .input {
     margin: 0 0 8px 0;
 }
 
-.input label {
+form.card .input label {
     font-size: 14px;
     font-weight: 700;
     margin: 0 8px 0 0;
@@ -20,7 +20,7 @@ form.card .content .input {
     white-space: nowrap;
 }
 
-.input input[type="text"] {
+form.card .input input[type="text"] {
     font-size: 14px;
     padding: 4px 8px;
     border: 1px solid #CCC;
@@ -28,7 +28,7 @@ form.card .content .input {
     min-width: 300px;
 }
 
-.input textarea {
+form.card .input textarea {
     font-size: 14px;
     padding: 4px 8px;
     border: 1px solid #CCC;

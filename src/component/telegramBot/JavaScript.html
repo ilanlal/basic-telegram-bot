@@ -2,7 +2,7 @@
     (function () {
         this.Global_Resources = {
             "module": "bot-setup",
-            "version": "0.0.1",
+            "version": "0.0.2",
             "en": {
                 "welcome": "Welcome to telegram bot",
                 "bot": {
@@ -11,70 +11,132 @@
                     "description": "Description",
                     "commands": "Commands"
                 },
-                "actions": {
-                    "action": "Action",
-                    "message": "Message",
-                    "method": "Method",
-                    "payload": {
-                        "payload": "Payload",
-                        "caption": "Caption",
-                        "text": "Text",
-                        "photo": "Photo",
-                        "video": "Video",
-                        "reply": "Reply",
-                        "reply_markup": "Reply markup",
-                        "keyboard": "Keyboard",
-                        "inline_keyboard": "Inline keyboard",
-                        "callback_data": "Callback data",
-                        "url": "URL",
-                        "callback_query": "Callback query",
-                        "chat_id": "Chat ID",
-                        "message_id": "Message ID",
-                        "parse_mode": "Parse mode",
-                        "disable_web_page_preview": "Disable web page preview",
-                        "disable_notification": "Disable notification",
-                        "reply_to_message_id": "Reply to message ID"
+                "inputFields": [
+                    {
+                        "id": "MESSAGE_TEXT",
+                        "type": "text",
+                        "required": true,
+                        "label": "Message text",
+                        "placeholder": "Enter message here",
+                        "defaultValue": "This is a test message"
+                    },
+                    {
+                        "id": "CHAT_ID",
+                        "type": "text",
+                        "required": true,
+                        "label": "Chat ID",
+                        "placeholder": "Enter chatid here",
+                        "defaultValue": ""
                     }
-                },
+                ],
+                "actions": [
+                    { "id": "sendMessage", "label": "Send message", "handler": "BotSetupComponent.AppHandler.onClick(event)" },
+                    { "id": "setWebhook", "label": "Set webhook", "handler": "BotSetupComponent.AppHandler.onClick(event)" },
+                    { "id": "deleteWebhook", "label": "Delete webhook", "handler": "BotSetupComponent.AppHandler.onClick(event)" }
+                ]
             }
         };
 
         const locale = 'en';
         const resources = this.Global_Resources[locale];
 
-        const _botSetup = this.BotSetup = {
+        const thisComponent = this.BotSetupComponent = {
             // Model class
             AppHandler: {
                 // start method
-                start: (appDOM) => {
-                    console.log('😀 start', appDOM);
-                    const viewModel = _botSetup.ViewModel;
-                    viewModel.start();
-                },
-                
-            },
-            // View class
-            ViewModel: {
-                WELCOME_CARD_ID: 'welcome-card',
-                HELP_CARD_ID: 'help-card',
-                // start method
                 start: () => {
-                    console.log('😀 ViewModel.start');
-                    _botSetup.CardView.renderPage({ container: document.getElementById("app") });
+                    console.log('😀 start');
+                    thisComponent.ViewModel.start();
+                    __appCoreViewModel.renderWorkInProgress({
+                        cardId: thisComponent.ViewModel.STATE_CARD_ID,
+                        message: 'Loading...'
+                    });
+                    thisComponent.AppHandler.getWebhook();
                 },
                 // onClick method
                 onClick: (e) => {
                     console.log('😀 onClick', e);
-                    const viewModel = _botSetup.ViewModel;
-                    if (e.target.id === 'refresh') {
+                    if (e.target.id === 'setWebhook') {
+                        thisComponent.AppHandler.setWebhook();
+                        // refresh the page
+                    } else if (e.target.id === 'deleteWebhook') {
+                        thisComponent.AppHandler.deleteWebhook();
+                        // refresh the page
+                    } else if (e.target.id === 'sendMessage') {
+                        thisComponent.AppHandler.sendMessage();
                         // refresh the page
                     }
                 },
+                getWebhook: () => {
+                    console.log('😀 getWebhook');
+                    // call the server to get the webhook
+                    // call the server
+                    google.script.run
+                        .withSuccessHandler(thisComponent.AppHandler.onGetSuccess)
+                        .withFailureHandler(thisComponent.AppHandler.onServerFailure)
+                        .getWebhookInfo();
+                },
+                onGetSuccess: (response) => {
+                    console.log('😀 onGetSuccess', { response });
+                    __appCoreViewModel.renderIdleState({
+                        cardId: thisComponent.ViewModel.STATE_CARD_ID,
+                        message: 'Idle'
+                    });
+
+                    // todo: loop on all entries of response.result object
+                    for (const element of Object.entries(response.result)) {
+                        thisComponent.ViewModel.updateView(element);
+                    }
+                    // and update the view
+
+                },
+                onServerFailure: (error) => {
+                    console.log('😀 onGetFailure', error);
+                    __appCoreViewModel.renderErrorState({
+                        cardId: thisComponent.ViewModel.STATE_CARD_ID,
+                        message: error.message
+                    });
+                    // todo: update the view
+                },
+                setWebhook: () => {
+                    console.log('😀 setWebhook');
+                },
+                deleteWebhook: () => {
+                    console.log('😀 deleteWebhook');
+                },
+                sendMessage: () => {
+                    console.log('😀 sendMessage');
+                    const chat_id = document.getElementById('CHAT_ID').value;
+                    const text = document.getElementById('MESSAGE_TEXT').value;
+                    __appCoreViewModel.renderWorkInProgress({
+                        cardId: thisComponent.ViewModel.STATE_CARD_ID,
+                        message: 'Sending message...' + text + ' to ' + chat_id
+                    });
+
+                    google.script.run
+                        .withSuccessHandler(thisComponent.AppHandler.onSendMessageSuccess)
+                        .withFailureHandler(thisComponent.AppHandler.onServerFailure)
+                        .sendMessage(chat_id, text);
+                },
+                onSendMessageSuccess: (response) => {
+                    console.log('😀 onSendMessageSuccess', { response });
+                    __appCoreViewModel.renderIdleState({
+                        cardId: thisComponent.ViewModel.STATE_CARD_ID,
+                        message: 'Idle'
+                    });
+                }
             },
-            // CardView class
-            CardView: {
+            // View class
+            ViewModel: {
+                STATE_CARD_ID: 'state-card',
+                BOT_CARD_ID: 'bot-card',
+                // start method
+                start: () => {
+                    console.log('😀 ViewModel.start');
+                    thisComponent.ViewModel.renderPage({ container: document.getElementById("app") });
+                },
                 // renderSidebar method
-                renderPage: ({ container = document.getElementById("app") }) => {
+                renderPage: ({ container }) => {
                     console.log('😀 renderPage', { container });
                     if (!container) {
                         return;
@@ -83,64 +145,30 @@
                     // Add container
                     container.innerHTML = '<div class="container" id="appContainer"></div>';
 
-                    _botSetup.CardView.appendCard({
+                    __appCoreViewModel.appendCard({
                         container: container.querySelector('#appContainer'),
-                        key: _botSetup.ViewModel.WELCOME_CARD_ID,
+                        id: thisComponent.ViewModel.STATE_CARD_ID,
                         title: '<h1>ver: ' + this.Global_Resources.version + '</h1>'
                     });
 
-                    _botSetup.CardView.appendCard({
+                    __appCoreViewModel.appendCard({
                         container: container.querySelector('#appContainer'),
-                        key: _botSetup.ViewModel.HELP_CARD_ID,
+                        id: thisComponent.ViewModel.BOT_CARD_ID,
                         title: resources.welcome,
-                        content: "<form id='form'><input type='text' name='name' placeholder='Name' required><input type='submit' value='Submit'></form>",
-                        actions: [{
-                            id: 'refresh',
-                            label: 'Refresh',
-                            handler: 'BotSetup.ViewModel.onClick(event)'
-                        }]
+                        actions: resources.actions,
+                        inputFields: resources.inputFields
                     });
 
                 },
-                appendCard: ({ container, key, title, subtitle, content, actions, hidden }) => {
-                    console.log('😀 renderCard', { container, key, title, subtitle, content, actions });
-                    if (!container) {
-                        return;
-                    }
-
-                    let html = '';
-                    // Card
-                    html += `<div class="card ${hidden ? 'hidden' : ''}" id="${key}">`;
-                    // Add card titlex
-                    html += `  <div class="title">${title}`;
-                    html += '    <div class="right led"></div>';
-                    if (subtitle) {
-                        html += `    <div class="subtitle1">${subtitle}</div>`;
-                    }
-                    html += '  </div>';
-                    // Add card content
-                    html += '  <div class="content body1">';
-                    html += content || '';
-                    html += '  </div>';
-                    if (actions) {
-                        // Add card actions
-                        html += '  <div class="action">';
-                        actions.forEach((action) => {
-                            html += `    <input class="button ${action.className || 'primary'}" type="button" value="${action.label}"`
-                                + ` id="${action.id}" `
-                                + ` onclick="${action.handler}" />`;
-                        });
-                        html += '  </div>';
-                    }
-
-                    // end of card
-                    html += '</div>';
-                    container.innerHTML += html;
-                }
-            }
+                // updateView method
+                updateView: (data) => {
+                    console.log('😀 updateView', { data });
+                    // update the view
+                },
+            } // End of ViewModel
         };
 
-        _botSetup.AppHandler.start();
+        thisComponent.AppHandler.start();
     })();
 
 
