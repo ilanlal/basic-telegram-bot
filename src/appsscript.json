@@ -21,5 +21,21 @@
     "https://www.googleapis.com/auth/script.container.ui",
     "https://www.googleapis.com/auth/script.external_request",
     "https://www.googleapis.com/auth/userinfo.email"
+  ],
+  "addOns": {
+    "common": {
+      "name": "Basic Telegram Bot",
+      "logoUrl": "https://www.gstatic.com/images/branding/product/1x/translate_24dp.png",
+      "layoutProperties": {
+        "primaryColor": "#2772ed"
+      },
+      "homepageTrigger": {
+        "runFunction": "onHomepage"
+      }
+    },
+    "sheets": {}
+  },
+  "urlFetchWhitelist": [
+    "https://api.telegram.org/"
   ]
 }

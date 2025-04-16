@@ -37,7 +37,7 @@ class AddonMenu {
                 .addItem('⚙️ Project setup', 'AddonMenu.openSetupDialog')
                 .addItem("🤖 Send test message", 'AddonMenu.openTestMessageDialog')
                 .addSeparator()
-                .addItem('⚙️ Project settings', 'AddonMenu.openDialogSetting')
+                .addItem('⚙️ Home page', 'onHomepage')
                 .addSeparator()
                 .addItem('❔ Help', 'AddonMenu.openDialogHelp')
                 .addToUi();

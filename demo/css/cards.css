@@ -1,5 +1,5 @@
 .card {
-    background-color: #999;
+    background-color: #CCC;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 10px;
@@ -12,26 +12,19 @@
 .card .content {
     display: block;
     min-height:10px;
-    height: 140px;
+    max-height: 240px;
     overflow-y: auto;
     overflow-x: hidden;
+    padding: 10px;
+    font-size: 12px;
 }
 
-.card .content span {
-    display: block;
-    padding: 4px 10px;
-    width: 100%;
-}
-
-.card .content span.label {
+.card .header {
     background-color: #555;
     color: #FFF;
-    font-size: 10px;
-    display: block;
+    font-size: 14px;
+    padding: 10px;
     border-radius: 5px 5px 0 0;
-    width: fit-content;
-    margin: 0 0 4px 0;
-    padding: 2px 4px;
 }
 
 .card .footer {
@@ -41,4 +34,5 @@
     padding: 10px;
     border-radius: 0 0 5px 5px;
     text-align: right;
+    min-height: 30px;
 }
